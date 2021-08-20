@@ -1,0 +1,1 @@
+{"version":3,"sources":["webpack:///./src/style.scss"],"names":[],"mappings":"AAAA;;EAAA;AAIA;EACC;EACA;EACA;AAAD,C","file":"style-index.css","sourcesContent":["/**\n * Styles applied to both the front and back end.\n */\n\n.wp-block-hb-block-landing-section {\n\tbackground-color: #21759b;\n\tcolor: #fff;\n\tpadding: 2px;\n}\n"],"sourceRoot":""}

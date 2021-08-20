@@ -1,1 +1,8 @@
-.wp-block-create-block-hb-block-landing-section{border:1px dotted red}
+/**
+ * Styles applied in the editor only.
+ */
+.wp-block-hb-block-landing-section {
+  border: 1px dotted #f00;
+}
+
+/*# sourceMappingURL=index.css.map*/

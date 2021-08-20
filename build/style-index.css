@@ -1,1 +1,10 @@
-.wp-block-create-block-hb-block-landing-section{background-color:#21759b;color:#fff;padding:2px}
+/**
+ * Styles applied to both the front and back end.
+ */
+.wp-block-hb-block-landing-section {
+  background-color: #21759b;
+  color: #fff;
+  padding: 2px;
+}
+
+/*# sourceMappingURL=style-index.css.map*/
