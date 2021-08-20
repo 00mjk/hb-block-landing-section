@@ -1,16 +1,36 @@
 {
 	"apiVersion": 2,
-	"name": "create-block/hb-block-landing-section",
+	"name": "hb/landing-section",
 	"version": "0.1.0",
-	"title": "Hb Block Landing Section",
+	"title": "Hb Block: Landing Section",
 	"category": "design",
 	"icon": "smiley",
 	"description": "A full width grid template for landing page sections.",
-	"supports": {
-		"html": false
-	},
-	"textdomain": "hb-block-landing-section",
+	"keywords": [ "landing page", "section", "full width" ],
+	"textdomain": "hb-landing-section",
 	"editorScript": "file:./build/index.js",
 	"editorStyle": "file:./build/index.css",
-	"style": "file:./build/style-index.css"
+	"style": "file:./build/style-index.css",
+	"attributes": {
+		"gridColumnStart": {
+			"enum": [ "oneone-l", "threetwo-l", "sixteennine-l" ]
+		},
+		"gridColumnEnd": {
+			"enum": [ "oneone-r", "threetwo-r", "sixteennine-r" ]
+		}
+	},
+	"example": {
+		"attributes": {
+			"gridColumnStart": "oneone-l",
+			"gridColumnEnd": "oneone-r"
+		}
+	},
+	"supports": {
+		"anchor": true,
+		"className": true,
+		"color": {
+			"gradients": true,
+			"link": true
+		}
+	}
 }

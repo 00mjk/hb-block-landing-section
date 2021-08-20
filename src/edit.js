@@ -20,12 +20,33 @@ import './editor.scss';
  * editor. This represents what the editor will render when the block is used.
  */
 export default function Edit() {
+
+		const {
+			attributes: { gridColumnStart, gridColumnEnd },
+			setAttributes,
+		} = props;
+
+		const onChangeGridColumnStart = ( value ) => {
+			setAttributes( { gridColumnStart: value } );
+		};
+
+		const onChangeGridColumnEnd = ( value ) => {
+			setAttributes( { gridColumnEnd: value } );
+		};
+
+
 	return (
-		<p { ...useBlockProps() }>
-			{ __(
-				'Hb Block Landing Section – hello from the editor!',
-				'hb-block-landing-section'
-			) }
-		</p>
+
+        <section { ...useBlockProps() }>
+            <div className="hbls_content" style='gridRow="{ example.attributes.gridColumnStart }"; gridColumn="{ example.attributes.gridColumnEnd }"' >
+                { __(
+                    'Landing Section – hello from the editor!',
+                    'landing-section'
+                ) }
+            </div>
+            <div className="hbls_backdrop">
+            </div>
+        </section>
+
 	);
 }

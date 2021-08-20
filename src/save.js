@@ -18,9 +18,11 @@ export default function save() {
 	return (
 		<p { ...useBlockProps.save() }>
 			{ __(
-				'Hb Block Landing Section – hello from the saved content!',
-				'hb-block-landing-section'
+				'Hb Landing Section – hello from the saved content!',
+				'hb-landing-section'
 			) }
 		</p>
+
+
 	);
 }

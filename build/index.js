@@ -214,7 +214,32 @@ __webpack_require__.r(__webpack_exports__);
  */
 
 function Edit() {
-  return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", Object(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__["useBlockProps"])(), Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__["__"])('Hb Block Landing Section – hello from the editor!', 'hb-block-landing-section'));
+  const {
+    attributes: {
+      gridColumnStart,
+      gridColumnEnd
+    },
+    setAttributes
+  } = props;
+
+  const onChangeGridColumnStart = value => {
+    setAttributes({
+      gridColumnStart: value
+    });
+  };
+
+  const onChangeGridColumnEnd = value => {
+    setAttributes({
+      gridColumnEnd: value
+    });
+  };
+
+  return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("section", Object(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__["useBlockProps"])(), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
+    className: "hbls_content",
+    style: "gridRow=\"{ example.attributes.gridColumnStart }\"; gridColumn=\"{ example.attributes.gridColumnEnd }\""
+  }, Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__["__"])('Landing Section – hello from the editor!', 'landing-section')), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
+    className: "hbls_backdrop"
+  }));
 }
 
 /***/ }),
@@ -274,7 +299,7 @@ __webpack_require__.r(__webpack_exports__);
  * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-registration/
  */
 
-Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__["registerBlockType"])('create-block/hb-block-landing-section', {
+Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__["registerBlockType"])('hb/landing-section', {
   /**
    * @see ./edit.js
    */
@@ -323,7 +348,7 @@ __webpack_require__.r(__webpack_exports__);
  */
 
 function save() {
-  return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__["useBlockProps"].save(), Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__["__"])('Hb Block Landing Section – hello from the saved content!', 'hb-block-landing-section'));
+  return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__["useBlockProps"].save(), Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__["__"])('Hb Landing Section – hello from the saved content!', 'hb-landing-section'));
 }
 
 /***/ }),
