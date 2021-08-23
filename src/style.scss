@@ -69,14 +69,14 @@
     }
 }
 
-wp-block-hb-landing-section > .hbls_content {
+wp-block-hb-landing-section > .hb__landingSection_content {
     position: relative;
     grid-column: var(--col);
     grid-row: var(--row);
     z-index: 0;
 }
 
-wp-block-hb-landing-section > .hbls_backdrop {
+wp-block-hb-landing-section > .hb__landingSection_backdrop {
     position: absolute;
     grid-column: 1 / -1;
     grid-row: 1 / -1;

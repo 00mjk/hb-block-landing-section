@@ -12,22 +12,20 @@
 	"editorStyle": "file:./build/index.css",
 	"style": "file:./build/style-index.css",
 	"attributes": {
-		"gridColumnStart": {
-			"enum": [ "oneone-l", "threetwo-l", "sixteennine-l" ]
+		"style": {
+			"gridColumnStart": {
+				"enum": [ "oneone-l", "threetwo-l", "sixteennine-l" ]
+			},
+			"gridColumnEnd": {
+				"enum": [ "oneone-r", "threetwo-r", "sixteennine-r" ]
+			}
 		},
-		"gridColumnEnd": {
-			"enum": [ "oneone-r", "threetwo-r", "sixteennine-r" ]
-		}
-	},
-	"example": {
-		"attributes": {
-			"gridColumnStart": "oneone-l",
-			"gridColumnEnd": "oneone-r"
-		}
+		"className": "hb__landingSection"
 	},
 	"supports": {
 		"anchor": true,
-		"className": true,
+		"className": false,
+		"customClassName": true,
 		"color": {
 			"gradients": true,
 			"link": true

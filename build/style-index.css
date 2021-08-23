@@ -73,14 +73,14 @@
     grid-template-columns: [full-l] 1fr [sixteennine-l threetwo-l oneone-l] calc(100% - 2 * var(--hb_gutters)) [oneone-r threetwo-r sixteennine-r] 1fr [full-r];
   }
 }
-wp-block-hb-landing-section > .hbls_content {
+wp-block-hb-landing-section > .hb__landingSection_content {
   position: relative;
   grid-column: var(--col);
   grid-row: var(--row);
   z-index: 0;
 }
 
-wp-block-hb-landing-section > .hbls_backdrop {
+wp-block-hb-landing-section > .hb__landingSection_backdrop {
   position: absolute;
   grid-column: 1/-1;
   grid-row: 1/-1;
