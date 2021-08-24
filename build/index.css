@@ -1,8 +1,12 @@
 /**
  * Styles applied in the editor only.
  */
-.wp-block-hb-landing-section {
+.hb__landingSection {
   border: 1px dotted #f00;
+}
+
+.hb_inspectorHelpButton {
+  margin: 0 auto;
 }
 
 /*# sourceMappingURL=index.css.map*/

@@ -8046,11 +8046,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/block-editor */ "@wordpress/block-editor");
-/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/blocks */ "@wordpress/blocks");
-/* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/@wordpress/icons/build-module/index.js");
+/* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/blocks */ "@wordpress/blocks");
+/* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/@wordpress/icons/build-module/index.js");
+/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @wordpress/block-editor */ "@wordpress/block-editor");
+/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_4__);
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_5__);
 /* harmony import */ var _style_scss__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./style.scss */ "./src/style.scss");
@@ -8073,46 +8073,59 @@ __webpack_require__.r(__webpack_exports__);
 
 /* Register the block type */
 
-Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_3__["registerBlockType"])('hb/landing-section', {
+Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_2__["registerBlockType"])('hb/landing-section', {
   /* Handle the editor block rendering */
-  edit: props => {
-    const blockProps = Object(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__["useBlockProps"])();
+  edit: ({
+    attributes
+  }) => {
+    /* Add classname to props */
+    const blockProps = Object(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_4__["useBlockProps"])({
+      className: 'hb__landingSection'
+    });
+    /* Define the WP dependencies */
+
     const {
-      className,
-      attributes: {
-        gridColumnStart,
-        gridColumnEnd,
-        clssName
-      },
-      setAttributes
-    } = props;
+      InspectorControls
+    } = wp.blockEditor;
+    const {
+      PanelBody
+    } = wp.components;
+    const {
+      PanelRow
+    } = wp.components;
+    /* Handle property updates */
 
     const onChangeGridColumnStart = value => {
-      setAttributes({
+      blockProps.setAttributes({
         gridColumnStart: value
       });
     };
 
     const onChangeGridColumnEnd = value => {
-      setAttributes({
+      blockProps.setAttributes({
         gridColumnEnd: value
       });
     };
+    /* Build JSX block for the editor */
+
 
     return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["Fragment"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("section", blockProps, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
-      className: "hb__landingSection_content"
-    }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, "gridRow is "), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, "gridColumn is ")), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
+      className: "hb__landingSection_content",
+      style: {
+        gridColumnStart: attributes.gridColumnStart,
+        gridColumnEnd: attributes.gridColumnEnd,
+        minHeight: attributes.minHeight
+      }
+    }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, "gridColumnStart is ", attributes.gridColumnStart, "."), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, "gridColumnEnd is ", attributes.gridColumnEnd, "."), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_4__["InnerBlocks"], null)), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
       className: "hb__landingSection_backdrop"
-    })), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_5__["Toolbar"], {
-      label: "Options",
-      id: "options-toolbar"
-    }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_5__["ToolbarGroup"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_5__["ToolbarButton"], {
-      icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_4__["help"],
-      label: "Help"
-    })), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_5__["ToolbarGroup"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_5__["ToolbarItem"], null, toggleProps => Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_5__["DropdownMenu"], {
-      hasArrowIndicator: true,
+    })), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(InspectorControls, null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(PanelBody, {
+      title: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__["__"])('Width and Position'),
+      initialOpen: true
+    }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(PanelRow, null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_5__["DropdownMenu"], {
       icon: _svg_icons_js__WEBPACK_IMPORTED_MODULE_8__["sectionAR"],
-      label: "Align",
+      label: "Choose the aspect ratio",
+      title: "Aspect Ratio",
+      isCollapsed: true,
       controls: [{
         icon: _svg_icons_js__WEBPACK_IMPORTED_MODULE_8__["sectionAR11"],
         title: '1:1',
@@ -8123,26 +8136,29 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_3__["registerBlockType"])('hb/
       }, {
         icon: _svg_icons_js__WEBPACK_IMPORTED_MODULE_8__["sectionAR169"],
         title: '16:9'
-      }],
-      toggleProps: toggleProps
-    }))), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_5__["ToolbarGroup"], {
+      }]
+    })), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(PanelRow, null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_5__["DropdownMenu"], {
       icon: _svg_icons_js__WEBPACK_IMPORTED_MODULE_8__["sectionARLH"],
-      label: "Align",
+      label: "Left-side track position",
       isCollapsed: true,
+      onChange: onChangeGridColumnStart,
       controls: [{
         icon: _svg_icons_js__WEBPACK_IMPORTED_MODULE_8__["sectionAR11"],
         title: '1:1',
-        isActive: true
+        isActive: true,
+        value: 'oneone-l'
       }, {
         icon: _svg_icons_js__WEBPACK_IMPORTED_MODULE_8__["sectionAR32"],
-        title: '3:2'
+        title: '3:2',
+        value: 'threetwo-l'
       }, {
         icon: _svg_icons_js__WEBPACK_IMPORTED_MODULE_8__["sectionAR169"],
-        title: '16:9'
+        title: '16:9',
+        value: 'sixteennine-l'
       }]
-    }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_5__["ToolbarGroup"], {
+    }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_5__["DropdownMenu"], {
       icon: _svg_icons_js__WEBPACK_IMPORTED_MODULE_8__["sectionARRH"],
-      label: "Align",
+      label: "Right-side track position",
       isCollapsed: true,
       controls: [{
         icon: _svg_icons_js__WEBPACK_IMPORTED_MODULE_8__["sectionAR11"],
@@ -8155,14 +8171,24 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_3__["registerBlockType"])('hb/
         icon: _svg_icons_js__WEBPACK_IMPORTED_MODULE_8__["sectionAR169"],
         title: '16:9'
       }]
-    })));
+    })), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(PanelRow, null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_5__["Button"], {
+      icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_3__["help"],
+      label: "Help",
+      className: "hb_inspectorHelpButton"
+    }, "Help")))));
   },
 
   /* Handle parsing the block into final markup as post content */
-  save: props => {
-    return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("section", _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__["useBlockProps"].save(), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
+  save: attributes => {
+    /* Add classname to props */
+    const blockProps = _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_4__["useBlockProps"].save({
+      className: 'hb__landingSection'
+    });
+    /* Build JSX block for front end mark up */
+
+    return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("section", blockProps, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
       className: "hb__landingSection_content"
-    }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, "gridRow is "), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, "gridColumn is ")), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
+    }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, "gridColumnStart is ", attributes.gridColumnStart, "."), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, "gridColumnEnd is ", attributes.gridColumnEnd, "."), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_4__["InnerBlocks"], null)), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
       className: "hb__landingSection_backdrop"
     }));
   }

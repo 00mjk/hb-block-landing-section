@@ -30,13 +30,13 @@
  * When the column outer edges meet the viewport edge, the column reponds by only
  * being as wide as the space available to prevent overflow.
  */
-.wp-block-hb-landing-section {
+.hb__landingSection {
   background-color: #6fd8cf;
   color: #fff;
   padding: 2px;
 }
 
-.wp-block-hb-landing-section {
+.hb__landingSection {
   gap: 0;
   --oneone: clamp(41.86vmax, 100vmin, 100vmin);
   /* Creates a square centre section */
@@ -56,31 +56,31 @@
 }
 
 @media (min-width: 100vh) {
-  .wp-block-hb-landing-section {
+  .hb__landingSection {
     -ms-grid-columns: [full-l] 1fr [sixteennine-l threetwo-l] var(--threetwo) [oneone-l] var(--oneone) [oneone-r] var(--threetwo) [threetwo-r sixteennine-r] 1fr [full-r];
     grid-template-columns: [full-l] 1fr [sixteennine-l threetwo-l] var(--threetwo) [oneone-l] var(--oneone) [oneone-r] var(--threetwo) [threetwo-r sixteennine-r] 1fr [full-r];
   }
 }
 @media (min-width: 150vh) {
-  .wp-block-hb-landing-section {
+  .hb__landingSection {
     -ms-grid-columns: [full-l] 1fr [sixteennine-l] var(--sixteennine) [threetwo-l] var(--threetwo) [oneone-l] var(--oneone) [oneone-r] var(--threetwo) [threetwo-r] var(--sixteennine) [sixteennine-r] 1fr [full-r];
     grid-template-columns: [full-l] 1fr [sixteennine-l] var(--sixteennine) [threetwo-l] var(--threetwo) [oneone-l] var(--oneone) [oneone-r] var(--threetwo) [threetwo-r] var(--sixteennine) [sixteennine-r] 1fr [full-r];
   }
 }
 @media (orientation: portrait) {
-  .wp-block-hb-landing-section {
+  .hb__landingSection {
     -ms-grid-columns: [full-l] 1fr [sixteennine-l threetwo-l oneone-l] calc(100% - 2 * var(--hb_gutters)) [oneone-r threetwo-r sixteennine-r] 1fr [full-r];
     grid-template-columns: [full-l] 1fr [sixteennine-l threetwo-l oneone-l] calc(100% - 2 * var(--hb_gutters)) [oneone-r threetwo-r sixteennine-r] 1fr [full-r];
   }
 }
-wp-block-hb-landing-section > .hb__landingSection_content {
+hb__landingSection > .hb__landingSection_content {
   position: relative;
   grid-column: var(--col);
   grid-row: var(--row);
   z-index: 0;
 }
 
-wp-block-hb-landing-section > .hb__landingSection_backdrop {
+hb__landingSection > .hb__landingSection_backdrop {
   position: absolute;
   grid-column: 1/-1;
   grid-row: 1/-1;

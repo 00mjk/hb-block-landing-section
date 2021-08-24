@@ -1,23 +1,17 @@
 /* WordPress Dependencies */
 import { __ } from '@wordpress/i18n';
-import { useBlockProps } from '@wordpress/block-editor';
 import { registerBlockType } from '@wordpress/blocks';
+import { help } from '@wordpress/icons';
+import { 
+	useBlockProps,
+	InnerBlocks,
+	InspectorControls
+ } from '@wordpress/block-editor';
 import {
-	alignCenter,
-	alignLeft,
-	alignRight,
-	more,
-	paragraph,
-	grid,
-	help,
-} from '@wordpress/icons';
-import {
-	SVG,
-	Toolbar,
-	ToolbarButton,
-	ToolbarGroup,
-	ToolbarItem,
+	Button,
 	DropdownMenu,
+	PanelBody,
+	PanelRow
 } from '@wordpress/components';
 
 
@@ -39,39 +33,37 @@ import {
 registerBlockType( 'hb/landing-section', {
 
 	/* Handle the editor block rendering */
-	edit: ( props ) => {
+	edit: ( { attributes } ) => {
 
-		const blockProps = useBlockProps();
+		/* Add classname to props */
+        const blockProps = useBlockProps( {
+            className: 'hb__landingSection',
+        } );
 
-		const {
-			className,
-			attributes: { gridColumnStart, gridColumnEnd, clssName },
-			setAttributes,
-		} = props;
+		/* Define the WP dependencies */
+		const { InspectorControls } = wp.blockEditor;
+		const { PanelBody } = wp.components;
+		const { PanelRow } = wp.components;
 
+		/* Handle property updates */
 		const onChangeGridColumnStart = ( value ) => {
-			setAttributes( { gridColumnStart: value } );
+			blockProps.setAttributes( { gridColumnStart: value } );
 		};
-
 		const onChangeGridColumnEnd = ( value ) => {
-			setAttributes( { gridColumnEnd: value } );
+			blockProps.setAttributes( { gridColumnEnd: value } );
 		};
 
-
+		/* Build JSX block for the editor */
 		return (
 			<>
 
-				<section { ...blockProps } 
-					//className={ classnames( blockProps.className, {
-					//[ `has-custom-width wp-block-button__width-${ width }` ]: width,
-					//[ `has-custom-font-size` ]: blockProps.style.fontSize,
-					//} ) }
-				>
+				<section { ...blockProps }>
 
-					<div className="hb__landingSection_content" >
+					<div className="hb__landingSection_content" style={{ gridColumnStart: attributes.gridColumnStart , gridColumnEnd: attributes.gridColumnEnd, minHeight: attributes.minHeight}}>
 
-						<p>gridRow is </p>
-						<p>gridColumn is </p>
+						<p>gridColumnStart is { attributes.gridColumnStart }.</p>
+						<p>gridColumnEnd is { attributes.gridColumnEnd }.</p>
+						<InnerBlocks />
 
 					</div>
 
@@ -80,49 +72,58 @@ registerBlockType( 'hb/landing-section', {
 
 				</section>
 
-				{/* id is required for server side rendering */}
-				<Toolbar label="Options" id="options-toolbar">
-					<ToolbarGroup>
-						<ToolbarButton icon={ help } label="Help" />
-					</ToolbarGroup>
-					<ToolbarGroup>
-						<ToolbarItem>
-							{ ( toggleProps ) => (
-								<DropdownMenu
-									hasArrowIndicator
-									icon={ sectionAR }
-									label="Align"
-									controls={ [
-										{ icon: sectionAR11, title: '1:1', isActive: true,},
-										{ icon: sectionAR32, title: '3:2' },
-										{ icon: sectionAR169, title: '16:9'  },
-									] }
-									toggleProps={ toggleProps }
-								/>
-							) }
-						</ToolbarItem>
-					</ToolbarGroup>
-					<ToolbarGroup
-						icon={ sectionARLH }
-						label="Align"
-						isCollapsed
-						controls={ [
-							{ icon: sectionAR11, title: '1:1', isActive: true,},
-							{ icon: sectionAR32, title: '3:2' },
-							{ icon: sectionAR169, title: '16:9'  },
-						] }
-					/>
-					<ToolbarGroup
-						icon={ sectionARRH }
-						label="Align"
-						isCollapsed
-						controls={ [
-							{ icon: sectionAR11, title: '1:1', isActive: true,},
-							{ icon: sectionAR32, title: '3:2' },
-							{ icon: sectionAR169, title: '16:9'  },
-						] }
-					/>
-				</Toolbar>
+				<InspectorControls>
+					<PanelBody
+						title={__('Width and Position')}
+						initialOpen={true}
+					>
+						<PanelRow>
+							<DropdownMenu
+								icon={ sectionAR }
+								label="Choose the aspect ratio"
+								title="Aspect Ratio"
+								isCollapsed
+								controls={ [
+									{ icon: sectionAR11, title: '1:1', isActive: true,},
+									{ icon: sectionAR32, title: '3:2', },
+									{ icon: sectionAR169, title: '16:9', },
+								] }
+							/>
+						</PanelRow>
+						<PanelRow>
+							<DropdownMenu
+								icon={ sectionARLH }
+								label="Left-side track position"
+								isCollapsed
+								onChange={onChangeGridColumnStart}
+								controls={ [
+									{ icon: sectionAR11, title: '1:1', isActive: true, value: 'oneone-l'},
+									{ icon: sectionAR32, title: '3:2', value: 'threetwo-l' },
+									{ icon: sectionAR169, title: '16:9', value: 'sixteennine-l' },
+								] }
+							/>
+							<DropdownMenu
+								icon={ sectionARRH }
+								label="Right-side track position"
+								isCollapsed
+								controls={ [
+									{ icon: sectionAR11, title: '1:1', isActive: true,},
+									{ icon: sectionAR32, title: '3:2' },
+									{ icon: sectionAR169, title: '16:9' },
+								] }
+							/>
+						</PanelRow>
+						<PanelRow>
+							<Button 
+								icon={ help }
+								label="Help"
+								className="hb_inspectorHelpButton"
+							>
+								Help
+							</Button>
+						</PanelRow>
+				    </PanelBody>
+				</InspectorControls>
 
 			</>
 
@@ -130,15 +131,22 @@ registerBlockType( 'hb/landing-section', {
 	},
 
 	/* Handle parsing the block into final markup as post content */
-	save: ( props ) => {
-		return (
+	save: ( attributes ) => {
 
-				<section { ...useBlockProps.save() } >
+		/* Add classname to props */
+        const blockProps = useBlockProps.save( {
+            className: 'hb__landingSection',
+        } );
+
+		/* Build JSX block for front end mark up */
+		return (
+				<section { ...blockProps }>
 
 					<div className="hb__landingSection_content" >
 
-					<p>gridRow is </p>
-					<p>gridColumn is </p>
+						<p>gridColumnStart is { attributes.gridColumnStart }.</p>
+						<p>gridColumnEnd is { attributes.gridColumnEnd }.</p>
+						<InnerBlocks />
 
 					</div>
 

@@ -12,15 +12,31 @@
 	"editorStyle": "file:./build/index.css",
 	"style": "file:./build/style-index.css",
 	"attributes": {
-		"style": {
-			"gridColumnStart": {
-				"enum": [ "oneone-l", "threetwo-l", "sixteennine-l" ]
-			},
-			"gridColumnEnd": {
-				"enum": [ "oneone-r", "threetwo-r", "sixteennine-r" ]
-			}
+		"gridColumnStart": {
+			"enum": [ "oneone-l", "threetwo-l", "sixteennine-l" ],
+			"source": "attribute",
+			"attribute": "style.gridColumnStart",
+			"default": "oneone-l"
 		},
-		"className": "hb__landingSection"
+		"gridColumnEnd": {
+			"enum": [ "oneone-r", "threetwo-r", "sixteennine-r" ],
+			"source": "attribute",
+			"attribute": "style.gridColumnEnd",
+			"default": "oneone-r"
+		},
+		"disabled": {
+			"type": "boolean",
+			"source": "attribute",
+			"selector": "button",
+			"attribute": "disabled"
+		},
+		"minHeight": {
+			"type": "string",
+			"source": "attribute",
+			"selector": ".hb__landingSection_content",
+			"attribute": "style.minHeight",
+			"default": "60px"
+		}
 	},
 	"supports": {
 		"anchor": true,
