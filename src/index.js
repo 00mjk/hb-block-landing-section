@@ -53,6 +53,8 @@ registerBlockType( 'hb/landing-section', {
 			blockProps.setAttributes( { gridColumnEnd: value } );
 		};
 
+		console.log({...blockProps});
+
 		/* Build JSX block for the editor */
 		return (
 			<>
