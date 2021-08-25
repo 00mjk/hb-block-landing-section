@@ -1,57 +1,59 @@
-/* WordPress Dependencies */
-import { __ } from '@wordpress/i18n';
-import { registerBlockType } from '@wordpress/blocks';
-import { help } from '@wordpress/icons';
-import { 
-	useBlockProps,
-	InnerBlocks,
-	InspectorControls
- } from '@wordpress/block-editor';
-import {
-	Button,
-	DropdownMenu,
-	PanelBody,
-	PanelRow
-} from '@wordpress/components';
-
-
-/* Local Styles */
+/**
+ * Import local Styles.
+ */
 import './style.scss';
 import './editor.scss';
 
-/* Local Icons */
-import {
-	sectionAR,
-	sectionAR11,
-	sectionAR32,
-	sectionAR169,
-	sectionARLH,
-	sectionARRH 
-} from '../svg/icons.js';
+/**
+ * Import local Icons.
+ */
+import { sectionAR, sectionAR11, sectionAR32, sectionAR169, sectionARLH, sectionARRH } from '../svg/icons.js';
 
-/* Register the block type */
+/**
+ * Import WordPress Dependencies.
+ */
+import { __ } from '@wordpress/i18n';
+import { registerBlockType } from '@wordpress/blocks';
+import { help } from '@wordpress/icons';
+import { useBlockProps, InnerBlocks, InspectorControls } from '@wordpress/block-editor';
+import { Button, DropdownMenu, PanelBody, PanelRow } from '@wordpress/components';
+
+
+/**
+ * Register the block "hb/landing-section".
+ */
 registerBlockType( 'hb/landing-section', {
 
-	/* Handle the editor block rendering */
-	edit: ( { attributes } ) => {
+	// Handle the editor block rendering
+	edit: ( { attributes, isSelected } ) => {
 
-		/* Add classname to props */
+		// Add custom classname to json properties
         const blockProps = useBlockProps( {
             className: 'hb__landingSection',
         } );
 
-		/* Define the WP dependencies */
-		const { InspectorControls } = wp.blockEditor;
-		const { PanelBody } = wp.components;
-		const { PanelRow } = wp.components;
-
-		/* Handle property updates */
+		// Handle property updates
 		const onChangeGridColumnStart = ( value ) => {
 			blockProps.setAttributes( { gridColumnStart: value } );
 		};
 		const onChangeGridColumnEnd = ( value ) => {
 			blockProps.setAttributes( { gridColumnEnd: value } );
 		};
+
+		// Build the editor css grid visual aid
+		const BorderDivs = () => {
+			const numbers = [1, 2, 3, 4, 5, 6, 7];
+			const divs = numbers.map((number) =>
+				<div style={{ gridColumn:number + '/ span 1' }}
+					 className='hb__outline'
+					 key={number.toString()}
+				>
+				</div>
+			);
+			return (
+				<>{divs}</>
+			);
+		}
 
 		console.log({...blockProps});
 
@@ -61,10 +63,21 @@ registerBlockType( 'hb/landing-section', {
 
 				<section { ...blockProps }>
 
-					<div className="hb__landingSection_content" style={{ gridColumnStart: attributes.gridColumnStart , gridColumnEnd: attributes.gridColumnEnd, minHeight: attributes.minHeight}}>
+					{ isSelected && (
+						<BorderDivs />
+					) }
+
+
+					<div className="hb__landingSection_content" 
+						style={{ gridColumnStart: attributes.gridColumnStart,
+								 gridColumnEnd: attributes.gridColumnEnd,
+								 minHeight: attributes.minHeight
+						}}
+					>
 
 						<p>gridColumnStart is { attributes.gridColumnStart }.</p>
 						<p>gridColumnEnd is { attributes.gridColumnEnd }.</p>
+
 						<InnerBlocks />
 
 					</div>
@@ -86,9 +99,22 @@ registerBlockType( 'hb/landing-section', {
 								title="Aspect Ratio"
 								isCollapsed
 								controls={ [
-									{ icon: sectionAR11, title: '1:1', isActive: true,},
-									{ icon: sectionAR32, title: '3:2', },
-									{ icon: sectionAR169, title: '16:9', },
+									{ 
+										icon: sectionAR11, 
+										title: '1:1', 
+										isActive: true,
+										isDisabled: false,
+									},
+									{ 
+										icon: sectionAR32,
+										title: '3:2',
+										isDisabled: false,
+									},
+									{ 
+										icon: sectionAR169,
+										title: '16:9',
+										isDisabled: false,
+									},
 								] }
 							/>
 						</PanelRow>
@@ -99,9 +125,25 @@ registerBlockType( 'hb/landing-section', {
 								isCollapsed
 								onChange={onChangeGridColumnStart}
 								controls={ [
-									{ icon: sectionAR11, title: '1:1', isActive: true, value: 'oneone-l'},
-									{ icon: sectionAR32, title: '3:2', value: 'threetwo-l' },
-									{ icon: sectionAR169, title: '16:9', value: 'sixteennine-l' },
+									{ 
+										icon: sectionAR11,
+										title: '1:1',
+										isActive: true,
+										isDisabled: false,
+										value: 'oneone-l'
+									},
+									{ 
+										icon: sectionAR32,
+										title: '3:2',
+										isDisabled: false,
+										value: 'threetwo-l' 
+									},
+									{ 
+										icon: sectionAR169,
+										title: '16:9',
+										isDisabled: false,
+										value: 'sixteennine-l'
+									},
 								] }
 							/>
 							<DropdownMenu
@@ -119,7 +161,7 @@ registerBlockType( 'hb/landing-section', {
 							<Button 
 								icon={ help }
 								label="Help"
-								className="hb_inspectorHelpButton"
+								className="hb__inspectorHelpButton"
 							>
 								Help
 							</Button>
