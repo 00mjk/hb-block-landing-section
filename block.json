@@ -13,16 +13,22 @@
 	"style": "file:./build/style-index.css",
 	"attributes": {
 		"gridColumnStart": {
-			"enum": [ "oneone-l", "threetwo-l", "sixteennine-l" ],
+			"enum": [ "oneone-l", "threetwo-l", "sixteennine-l", "full-l" ],
 			"source": "attribute",
 			"attribute": "style.gridColumnStart",
 			"default": "oneone-l"
 		},
 		"gridColumnEnd": {
-			"enum": [ "oneone-r", "threetwo-r", "sixteennine-r" ],
+			"enum": [ "oneone-r", "threetwo-r", "sixteennine-r", "full-r" ],
 			"source": "attribute",
 			"attribute": "style.gridColumnEnd",
 			"default": "oneone-r"
+		},
+		"gridColumnAll": {
+			"enum": [ "oneone", "threetwo", "sixteennine", "full", "disabled" ],
+			"source": "attribute",
+			"attribute": "style.gridColumnEnd",
+			"default": "oneone"
 		},
 		"disabled": {
 			"type": "boolean",

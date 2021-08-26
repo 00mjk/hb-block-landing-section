@@ -7,7 +7,14 @@ import './editor.scss';
 /**
  * Import local Icons.
  */
-import { sectionAR, sectionAR11, sectionAR32, sectionAR169, sectionARLH, sectionARRH } from '../svg/icons.js';
+import { 
+	IconSettingsCSSGridTracksLR,
+	IconSettingsAspectRatioSquare,
+	IconSettingsAspectRatioWide,
+	IconSettingsAspectRatioUltrawide,
+	IconSettingsCSSGridTrackL,
+	IconSettingsCSSGridTrackR
+} from '../svg/icons.js';
 
 /**
  * Import WordPress Dependencies.
@@ -16,8 +23,8 @@ import { __ } from '@wordpress/i18n';
 import { registerBlockType } from '@wordpress/blocks';
 import { help } from '@wordpress/icons';
 import { useBlockProps, InnerBlocks, InspectorControls } from '@wordpress/block-editor';
-import { Button, DropdownMenu, PanelBody, PanelRow } from '@wordpress/components';
-
+import { Button, SelectControl, PanelBody, PanelRow } from '@wordpress/components';
+import { useState } from '@wordpress/element';
 
 /**
  * Register the block "hb/landing-section".
@@ -25,21 +32,77 @@ import { Button, DropdownMenu, PanelBody, PanelRow } from '@wordpress/components
 registerBlockType( 'hb/landing-section', {
 
 	// Handle the editor block rendering
-	edit: ( { attributes, isSelected } ) => {
+	edit: ( { attributes, setAttributes, isSelected } ) => {
 
 		// Add custom classname to json properties
         const blockProps = useBlockProps( {
             className: 'hb__landingSection',
         } );
 
-		// Handle property updates
-		const onChangeGridColumnStart = ( value ) => {
-			blockProps.setAttributes( { gridColumnStart: value } );
+		const gridPosStyle = {
+			gridColumnStart: attributes.gridColumnStart,
+			gridColumnEnd: attributes.gridColumnEnd,
+			minHeight: attributes.minHeight
 		};
-		const onChangeGridColumnEnd = ( value ) => {
-			blockProps.setAttributes( { gridColumnEnd: value } );
+/*
+		if ( attributes.gridColumnStart === attributes.gridColumnEnd ) {
+			let newGridColumnAll = attributes.gridColumnStart.split('-')[0];
+			setAttributes( { gridColumnAll: newGridColumnAll } );
+		} else {
+			setAttributes( { gridColumnAll: 'disabled' } );
+		}
+
+		// Define select values
+		const [ gridColumnAll, setGridColumnAll ] = useState( 'attributes.gridColumnAll' );
+*/
+
+		// Define select values
+		const [ gridColumnStart, setGridColumnStart ] = useState( 'attributes.gridColumnStart' );
+		// Define select values
+		const [ gridColumnEnd, setGridColumnEnd ] = useState( 'attributes.gridColumnEnd' );
+/*
+		// Handle setting vars on user option selection
+		const updateGridColumnAll = ( newValue ) => {
+			setAttributes( { gridColumnStart: newValue + '-l' } );
+			setAttributes( { gridColumnEnd: newValue + '-r' } );
+			useState( 'attributes.gridColumnStart' );
+			useState( 'attributes.gridColumnEnd' );
+		};
+*/
+		const updateGridColumnStart = ( newValue ) => {
+			setAttributes( { 
+				gridColumnStart: newValue + '-l'
+			} );
+			useState( 'attributes.gridColumnStart' );
+		};
+		const updateGridColumnEnd = ( newValue ) => {
+			setAttributes( { 
+				gridColumnEnd: newValue + '-r'
+			} );
+			useState( 'attributes.gridColumnEnd' );
 		};
 
+		const gridOptions = [
+			{ label: '1:1 Square', value: 'oneone' },
+			{ label: '3:2 Wide', value: 'threetwo' },
+			{ label: '16:9 Cinema', value: 'sixteennine' },
+			{ label: 'Full Width', value: 'full' },
+			{ label: 'Custom', value: 'disabled' },
+		];
+/*
+
+https://stackoverflow.com/questions/55655594/saving-selectcontrol-option
+		const SelectControlState = useState( {
+			gridColumnAll: 'oneone',
+		} )( ( { gridColumnAll, setState } ) => (
+			<SelectControl
+				label="Test"
+				value={ gridColumnAll }
+				options={ gridOptions }
+				onChange={ ( gridColumnAll ) => { setState( { gridColumnAll } ) } }
+			/>
+		) );
+*/
 		// Build the editor css grid visual aid
 		const BorderDivs = () => {
 			const numbers = [1, 2, 3, 4, 5, 6, 7];
@@ -55,8 +118,6 @@ registerBlockType( 'hb/landing-section', {
 			);
 		}
 
-		console.log({...blockProps});
-
 		/* Build JSX block for the editor */
 		return (
 			<>
@@ -66,23 +127,13 @@ registerBlockType( 'hb/landing-section', {
 					{ isSelected && (
 						<BorderDivs />
 					) }
-
-
-					<div className="hb__landingSection_content" 
-						style={{ gridColumnStart: attributes.gridColumnStart,
-								 gridColumnEnd: attributes.gridColumnEnd,
-								 minHeight: attributes.minHeight
-						}}
-					>
-
+					<div className="hb__landingSection_content" style={gridPosStyle}>
 						<p>gridColumnStart is { attributes.gridColumnStart }.</p>
 						<p>gridColumnEnd is { attributes.gridColumnEnd }.</p>
-
 						<InnerBlocks />
-
 					</div>
-
 					<div className="hb__landingSection_backdrop">
+						<InnerBlocks />
 					</div>
 
 				</section>
@@ -93,68 +144,25 @@ registerBlockType( 'hb/landing-section', {
 						initialOpen={true}
 					>
 						<PanelRow>
-							<DropdownMenu
-								icon={ sectionAR }
-								label="Choose the aspect ratio"
-								title="Aspect Ratio"
-								isCollapsed
-								controls={ [
-									{ 
-										icon: sectionAR11, 
-										title: '1:1', 
-										isActive: true,
-										isDisabled: false,
-									},
-									{ 
-										icon: sectionAR32,
-										title: '3:2',
-										isDisabled: false,
-									},
-									{ 
-										icon: sectionAR169,
-										title: '16:9',
-										isDisabled: false,
-									},
-								] }
-							/>
+							<IconSettingsCSSGridTracksLR />
+
 						</PanelRow>
 						<PanelRow>
-							<DropdownMenu
-								icon={ sectionARLH }
-								label="Left-side track position"
-								isCollapsed
-								onChange={onChangeGridColumnStart}
-								controls={ [
-									{ 
-										icon: sectionAR11,
-										title: '1:1',
-										isActive: true,
-										isDisabled: false,
-										value: 'oneone-l'
-									},
-									{ 
-										icon: sectionAR32,
-										title: '3:2',
-										isDisabled: false,
-										value: 'threetwo-l' 
-									},
-									{ 
-										icon: sectionAR169,
-										title: '16:9',
-										isDisabled: false,
-										value: 'sixteennine-l'
-									},
-								] }
+							<SelectControl
+								label="Left"
+								labelPosition="left"
+								title="Left Edge"
+								value={ gridColumnStart }
+								options={ gridOptions }
+								onChange={ updateGridColumnStart }
 							/>
-							<DropdownMenu
-								icon={ sectionARRH }
-								label="Right-side track position"
-								isCollapsed
-								controls={ [
-									{ icon: sectionAR11, title: '1:1', isActive: true,},
-									{ icon: sectionAR32, title: '3:2' },
-									{ icon: sectionAR169, title: '16:9' },
-								] }
+							<SelectControl
+								label="Right"
+								labelPosition="left"
+								title="Right Edge"
+								value={ gridColumnEnd }
+								options={ gridOptions }
+								onChange={ updateGridColumnEnd }
 							/>
 						</PanelRow>
 						<PanelRow>
@@ -170,7 +178,6 @@ registerBlockType( 'hb/landing-section', {
 				</InspectorControls>
 
 			</>
-
 		);
 	},
 
@@ -184,20 +191,18 @@ registerBlockType( 'hb/landing-section', {
 
 		/* Build JSX block for front end mark up */
 		return (
-				<section { ...blockProps }>
 
-					<div className="hb__landingSection_content" >
+			<section { ...blockProps }>
 
-						<p>gridColumnStart is { attributes.gridColumnStart }.</p>
-						<p>gridColumnEnd is { attributes.gridColumnEnd }.</p>
-						<InnerBlocks />
+				<div className="hb__landingSection_content" >
+					<p>gridColumnStart is { attributes.gridColumnStart }.</p>
+					<p>gridColumnEnd is { attributes.gridColumnEnd }.</p>
+					<InnerBlocks />
+				</div>
+				<div className="hb__landingSection_backdrop">
+				</div>
 
-					</div>
-
-					<div className="hb__landingSection_backdrop">
-					</div>
-
-				</section>
+			</section>
 
 		);
 	}
