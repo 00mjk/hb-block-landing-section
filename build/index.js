@@ -8138,37 +8138,31 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_5__["registerBlockType"])('hb/
       Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["useState"])('attributes.gridColumnEnd');
     };
 
-    const gridOptions = [{
-      label: '1:1 Square',
-      value: 'oneone'
-    }, {
-      label: '3:2 Wide',
-      value: 'threetwo'
-    }, {
-      label: '16:9 Cinema',
-      value: 'sixteennine'
-    }, {
-      label: 'Full Width',
-      value: 'full'
-    }, {
-      label: 'Custom',
-      value: 'disabled'
-    }];
-    /*
-    
-    https://stackoverflow.com/questions/55655594/saving-selectcontrol-option
-    		const SelectControlState = useState( {
-    			gridColumnAll: 'oneone',
-    		} )( ( { gridColumnAll, setState } ) => (
-    			<SelectControl
-    				label="Test"
-    				value={ gridColumnAll }
-    				options={ gridOptions }
-    				onChange={ ( gridColumnAll ) => { setState( { gridColumnAll } ) } }
-    			/>
-    		) );
-    */
-    // Build the editor css grid visual aid
+    const SelectControlGridLeft = () => {
+      const [gridColumnStart, setGridColumnStart] = Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["useState"])('oneone');
+      return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_8__["SelectControl"], {
+        label: "Test",
+        value: gridColumnStart,
+        options: [{
+          label: '1:1 Square',
+          value: 'oneone'
+        }, {
+          label: '3:2 Wide',
+          value: 'threetwo'
+        }, {
+          label: '16:9 Cinema',
+          value: 'sixteennine'
+        }, {
+          label: 'Full Width',
+          value: 'full'
+        }, {
+          label: 'Custom',
+          value: 'disabled'
+        }],
+        onChange: gridColumnStart => setGridColumnStart(newGridColumnStart)
+      });
+    }; // Build the editor css grid visual aid
+
 
     const BorderDivs = () => {
       const numbers = [1, 2, 3, 4, 5, 6, 7];
@@ -8192,19 +8186,49 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_5__["registerBlockType"])('hb/
     }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_7__["InnerBlocks"], null))), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_7__["InspectorControls"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_8__["PanelBody"], {
       title: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__["__"])('Width and Position'),
       initialOpen: true
-    }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_8__["PanelRow"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_svg_icons_js__WEBPACK_IMPORTED_MODULE_3__["IconSettingsCSSGridTracksLR"], null)), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_8__["PanelRow"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_8__["SelectControl"], {
+    }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_8__["PanelRow"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_svg_icons_js__WEBPACK_IMPORTED_MODULE_3__["IconSettingsCSSGridTracksLR"], null)), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_8__["PanelRow"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(SelectControlGridLeft, null), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_8__["SelectControl"], {
       label: "Left",
       labelPosition: "left",
       title: "Left Edge",
       value: gridColumnStart,
-      options: gridOptions,
+      options: [{
+        label: '1:1 Square',
+        value: 'oneone'
+      }, {
+        label: '3:2 Wide',
+        value: 'threetwo'
+      }, {
+        label: '16:9 Cinema',
+        value: 'sixteennine'
+      }, {
+        label: 'Full Width',
+        value: 'full'
+      }, {
+        label: 'Custom',
+        value: 'disabled'
+      }],
       onChange: updateGridColumnStart
     }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_8__["SelectControl"], {
       label: "Right",
       labelPosition: "left",
       title: "Right Edge",
       value: gridColumnEnd,
-      options: gridOptions,
+      options: [{
+        label: '1:1 Square',
+        value: 'oneone'
+      }, {
+        label: '3:2 Wide',
+        value: 'threetwo'
+      }, {
+        label: '16:9 Cinema',
+        value: 'sixteennine'
+      }, {
+        label: 'Full Width',
+        value: 'full'
+      }, {
+        label: 'Custom',
+        value: 'disabled'
+      }],
       onChange: updateGridColumnEnd
     })), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_8__["PanelRow"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_8__["Button"], {
       icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_6__["help"],

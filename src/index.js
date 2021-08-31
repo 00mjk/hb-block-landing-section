@@ -82,27 +82,32 @@ registerBlockType( 'hb/landing-section', {
 			useState( 'attributes.gridColumnEnd' );
 		};
 
-		const gridOptions = [
-			{ label: '1:1 Square', value: 'oneone' },
-			{ label: '3:2 Wide', value: 'threetwo' },
-			{ label: '16:9 Cinema', value: 'sixteennine' },
-			{ label: 'Full Width', value: 'full' },
-			{ label: 'Custom', value: 'disabled' },
-		];
-/*
 
-https://stackoverflow.com/questions/55655594/saving-selectcontrol-option
-		const SelectControlState = useState( {
-			gridColumnAll: 'oneone',
-		} )( ( { gridColumnAll, setState } ) => (
-			<SelectControl
-				label="Test"
-				value={ gridColumnAll }
-				options={ gridOptions }
-				onChange={ ( gridColumnAll ) => { setState( { gridColumnAll } ) } }
-			/>
-		) );
-*/
+		const SelectControlGridLeft = () => {
+			const [ gridColumnStart, setGridColumnStart ] = useState( 'oneone' );
+		 
+			return (
+				<SelectControl
+					label="Test"
+					value={ gridColumnStart }
+					options={ [
+						{ label: '1:1 Square', value: 'oneone' },
+						{ label: '3:2 Wide', value: 'threetwo' },
+						{ label: '16:9 Cinema', value: 'sixteennine' },
+						{ label: 'Full Width', value: 'full' },
+						{ label: 'Custom', value: 'disabled' },
+					] }
+					onChange={ ( gridColumnStart ) => setGridColumnStart( newGridColumnStart ) }
+				/>
+			);
+		};
+
+
+
+
+
+
+
 		// Build the editor css grid visual aid
 		const BorderDivs = () => {
 			const numbers = [1, 2, 3, 4, 5, 6, 7];
@@ -148,12 +153,19 @@ https://stackoverflow.com/questions/55655594/saving-selectcontrol-option
 
 						</PanelRow>
 						<PanelRow>
+							<SelectControlGridLeft />
 							<SelectControl
 								label="Left"
 								labelPosition="left"
 								title="Left Edge"
 								value={ gridColumnStart }
-								options={ gridOptions }
+								options={ [
+									{ label: '1:1 Square', value: 'oneone' },
+									{ label: '3:2 Wide', value: 'threetwo' },
+									{ label: '16:9 Cinema', value: 'sixteennine' },
+									{ label: 'Full Width', value: 'full' },
+									{ label: 'Custom', value: 'disabled' },
+								] }
 								onChange={ updateGridColumnStart }
 							/>
 							<SelectControl
@@ -161,7 +173,13 @@ https://stackoverflow.com/questions/55655594/saving-selectcontrol-option
 								labelPosition="left"
 								title="Right Edge"
 								value={ gridColumnEnd }
-								options={ gridOptions }
+								options={ [
+									{ label: '1:1 Square', value: 'oneone' },
+									{ label: '3:2 Wide', value: 'threetwo' },
+									{ label: '16:9 Cinema', value: 'sixteennine' },
+									{ label: 'Full Width', value: 'full' },
+									{ label: 'Custom', value: 'disabled' },
+								] }
 								onChange={ updateGridColumnEnd }
 							/>
 						</PanelRow>
