@@ -8092,57 +8092,56 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_5__["registerBlockType"])('hb/
     // Add custom classname to json properties
     const blockProps = Object(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_7__["useBlockProps"])({
       className: 'hb__landingSection'
-    });
+    }); // Declare the attribute array objects as vars for later use
+
+    const {
+      gridColumnStart,
+      gridColumnEnd,
+      gridColumnAll,
+      minHeight
+    } = attributes; // Create an object to use as inline CSS styles
+
     const gridPosStyle = {
-      gridColumnStart: attributes.gridColumnStart,
-      gridColumnEnd: attributes.gridColumnEnd,
-      minHeight: attributes.minHeight
+      gridColumnStart: gridColumnStart,
+      gridColumnEnd: gridColumnEnd,
+      minHeight: minHeight
+    }; // Get the CSS column values without the -l or -r suffixes
+
+    let gridColumnStartTrack = gridColumnStart.split("-")[0];
+    let gridColumnEndTrack = gridColumnEnd.split("-")[0]; // Test if they match, and assign the result to gridColumnAll
+
+    setAttributes({
+      gridColumnAll: gridColumnStartTrack === gridColumnEndTrack ? gridColumnStartTrack : false
+    }); // Handle setting vars on user option selection
+
+    const updateGridColumnAll = newValue => {
+      setAttributes({
+        gridColumnAll: newValue,
+        gridColumnStart: newValue + '-l',
+        gridColumnEnd: newValue + '-r'
+      });
+      Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["useState"])(gridColumnAll);
     };
-    /*
-    		if ( attributes.gridColumnStart === attributes.gridColumnEnd ) {
-    			let newGridColumnAll = attributes.gridColumnStart.split('-')[0];
-    			setAttributes( { gridColumnAll: newGridColumnAll } );
-    		} else {
-    			setAttributes( { gridColumnAll: 'disabled' } );
-    		}
-    
-    		// Define select values
-    		const [ gridColumnAll, setGridColumnAll ] = useState( 'attributes.gridColumnAll' );
-    */
-    // Define select values
-
-    const [gridColumnStart, setGridColumnStart] = Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["useState"])('attributes.gridColumnStart'); // Define select values
-
-    const [gridColumnEnd, setGridColumnEnd] = Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["useState"])('attributes.gridColumnEnd');
-    /*
-    		// Handle setting vars on user option selection
-    		const updateGridColumnAll = ( newValue ) => {
-    			setAttributes( { gridColumnStart: newValue + '-l' } );
-    			setAttributes( { gridColumnEnd: newValue + '-r' } );
-    			useState( 'attributes.gridColumnStart' );
-    			useState( 'attributes.gridColumnEnd' );
-    		};
-    */
 
     const updateGridColumnStart = newValue => {
       setAttributes({
         gridColumnStart: newValue + '-l'
       });
-      Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["useState"])('attributes.gridColumnStart');
+      Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["useState"])(gridColumnStart);
     };
 
     const updateGridColumnEnd = newValue => {
       setAttributes({
         gridColumnEnd: newValue + '-r'
       });
-      Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["useState"])('attributes.gridColumnEnd');
+      Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["useState"])(gridColumnEnd);
     };
 
-    const SelectControlGridLeft = () => {
-      const [gridColumnStart, setGridColumnStart] = Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["useState"])('oneone');
+    const SelectControlGridColumnAll = () => {
+      const [gridColumnAll, setGridColumnAll] = Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["useState"])('oneone');
       return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_8__["SelectControl"], {
         label: "Test",
-        value: gridColumnStart,
+        value: gridColumnAll,
         options: [{
           label: '1:1 Square',
           value: 'oneone'
@@ -8159,7 +8158,7 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_5__["registerBlockType"])('hb/
           label: 'Custom',
           value: 'disabled'
         }],
-        onChange: gridColumnStart => setGridColumnStart(newGridColumnStart)
+        onChange: newGridColumnAll => setGridColumnAll(newGridColumnAll)
       });
     }; // Build the editor css grid visual aid
 
@@ -8181,12 +8180,16 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_5__["registerBlockType"])('hb/
     return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["Fragment"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("section", blockProps, isSelected && Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(BorderDivs, null), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
       className: "hb__landingSection_content",
       style: gridPosStyle
-    }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, "gridColumnStart is ", attributes.gridColumnStart, "."), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, "gridColumnEnd is ", attributes.gridColumnEnd, "."), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_7__["InnerBlocks"], null)), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
+    }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, "gridColumnStart is ", gridColumnStart, "."), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, "gridColumnEnd is ", gridColumnEnd, "."), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_7__["InnerBlocks"], null)), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
       className: "hb__landingSection_backdrop"
     }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_7__["InnerBlocks"], null))), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_7__["InspectorControls"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_8__["PanelBody"], {
       title: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__["__"])('Width and Position'),
       initialOpen: true
-    }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_8__["PanelRow"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_svg_icons_js__WEBPACK_IMPORTED_MODULE_3__["IconSettingsCSSGridTracksLR"], null)), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_8__["PanelRow"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(SelectControlGridLeft, null), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_8__["SelectControl"], {
+    }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_8__["PanelRow"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_svg_icons_js__WEBPACK_IMPORTED_MODULE_3__["IconSettingsCSSGridTracksLR"], null)), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_8__["PanelRow"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(SelectControlGridColumnAll, {
+      id: "SelectControlGridColumnAll",
+      disabled: "{ disabled }",
+      onChange: updateGridColumnAll
+    })), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_8__["PanelRow"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_8__["SelectControl"], {
       label: "Left",
       labelPosition: "left",
       title: "Left Edge",
@@ -8203,12 +8206,9 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_5__["registerBlockType"])('hb/
       }, {
         label: 'Full Width',
         value: 'full'
-      }, {
-        label: 'Custom',
-        value: 'disabled'
       }],
       onChange: updateGridColumnStart
-    }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_8__["SelectControl"], {
+    })), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_8__["PanelRow"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_8__["SelectControl"], {
       label: "Right",
       labelPosition: "left",
       title: "Right Edge",
@@ -8225,9 +8225,6 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_5__["registerBlockType"])('hb/
       }, {
         label: 'Full Width',
         value: 'full'
-      }, {
-        label: 'Custom',
-        value: 'disabled'
       }],
       onChange: updateGridColumnEnd
     })), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_8__["PanelRow"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_8__["Button"], {
@@ -8246,10 +8243,11 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_5__["registerBlockType"])('hb/
     /* Build JSX block for front end mark up */
 
     return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("section", blockProps, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
-      className: "hb__landingSection_content"
-    }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, "gridColumnStart is ", attributes.gridColumnStart, "."), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, "gridColumnEnd is ", attributes.gridColumnEnd, "."), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_7__["InnerBlocks"], null)), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
+      className: "hb__landingSection_content",
+      style: gridPosStyle
+    }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, "gridColumnStart is ", gridColumnStart, "."), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, "gridColumnEnd is ", gridColumnEnd, "."), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_7__["InnerBlocks"], null)), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
       className: "hb__landingSection_backdrop"
-    }));
+    }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_7__["InnerBlocks"], null)));
   }
 });
 

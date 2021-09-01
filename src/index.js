@@ -26,6 +26,7 @@ import { useBlockProps, InnerBlocks, InspectorControls } from '@wordpress/block-
 import { Button, SelectControl, PanelBody, PanelRow } from '@wordpress/components';
 import { useState } from '@wordpress/element';
 
+
 /**
  * Register the block "hb/landing-section".
  */
@@ -39,57 +40,59 @@ registerBlockType( 'hb/landing-section', {
             className: 'hb__landingSection',
         } );
 
+		// Declare the attribute array objects as vars for later use
+		const {
+			gridColumnStart,
+			gridColumnEnd,
+			gridColumnAll,
+			minHeight
+		} = attributes
+
+		// Create an object to use as inline CSS styles
 		const gridPosStyle = {
-			gridColumnStart: attributes.gridColumnStart,
-			gridColumnEnd: attributes.gridColumnEnd,
-			minHeight: attributes.minHeight
+			gridColumnStart: gridColumnStart,
+			gridColumnEnd: gridColumnEnd,
+			minHeight: minHeight
 		};
-/*
-		if ( attributes.gridColumnStart === attributes.gridColumnEnd ) {
-			let newGridColumnAll = attributes.gridColumnStart.split('-')[0];
-			setAttributes( { gridColumnAll: newGridColumnAll } );
-		} else {
-			setAttributes( { gridColumnAll: 'disabled' } );
-		}
 
-		// Define select values
-		const [ gridColumnAll, setGridColumnAll ] = useState( 'attributes.gridColumnAll' );
-*/
+		// Get the CSS column values without the -l or -r suffixes
+		let gridColumnStartTrack = gridColumnStart.split("-")[0];
+		let gridColumnEndTrack = gridColumnEnd.split("-")[0];
 
-		// Define select values
-		const [ gridColumnStart, setGridColumnStart ] = useState( 'attributes.gridColumnStart' );
-		// Define select values
-		const [ gridColumnEnd, setGridColumnEnd ] = useState( 'attributes.gridColumnEnd' );
-/*
+		// Test if they match, and assign the result to gridColumnAll
+		setAttributes( { gridColumnAll: gridColumnStartTrack === gridColumnEndTrack ? gridColumnStartTrack : false } );
+
+
 		// Handle setting vars on user option selection
 		const updateGridColumnAll = ( newValue ) => {
-			setAttributes( { gridColumnStart: newValue + '-l' } );
-			setAttributes( { gridColumnEnd: newValue + '-r' } );
-			useState( 'attributes.gridColumnStart' );
-			useState( 'attributes.gridColumnEnd' );
+			setAttributes( { 
+				gridColumnAll: newValue,
+				gridColumnStart: newValue + '-l',
+				gridColumnEnd: newValue + '-r'
+			} );
+			useState( gridColumnAll );
 		};
-*/
 		const updateGridColumnStart = ( newValue ) => {
 			setAttributes( { 
 				gridColumnStart: newValue + '-l'
 			} );
-			useState( 'attributes.gridColumnStart' );
+			useState( gridColumnStart );
 		};
 		const updateGridColumnEnd = ( newValue ) => {
 			setAttributes( { 
 				gridColumnEnd: newValue + '-r'
 			} );
-			useState( 'attributes.gridColumnEnd' );
+			useState( gridColumnEnd );
 		};
 
 
-		const SelectControlGridLeft = () => {
-			const [ gridColumnStart, setGridColumnStart ] = useState( 'oneone' );
+		const SelectControlGridColumnAll = () => {
+			const [ gridColumnAll, setGridColumnAll ] = useState( 'oneone' );
 		 
 			return (
 				<SelectControl
 					label="Test"
-					value={ gridColumnStart }
+					value={ gridColumnAll }
 					options={ [
 						{ label: '1:1 Square', value: 'oneone' },
 						{ label: '3:2 Wide', value: 'threetwo' },
@@ -97,14 +100,11 @@ registerBlockType( 'hb/landing-section', {
 						{ label: 'Full Width', value: 'full' },
 						{ label: 'Custom', value: 'disabled' },
 					] }
-					onChange={ ( gridColumnStart ) => setGridColumnStart( newGridColumnStart ) }
+					onChange={ ( newGridColumnAll ) => setGridColumnAll( newGridColumnAll ) }
+			
 				/>
 			);
 		};
-
-
-
-
 
 
 
@@ -132,9 +132,9 @@ registerBlockType( 'hb/landing-section', {
 					{ isSelected && (
 						<BorderDivs />
 					) }
-					<div className="hb__landingSection_content" style={gridPosStyle}>
-						<p>gridColumnStart is { attributes.gridColumnStart }.</p>
-						<p>gridColumnEnd is { attributes.gridColumnEnd }.</p>
+					<div className="hb__landingSection_content" style={ gridPosStyle }>
+						<p>gridColumnStart is { gridColumnStart }.</p>
+						<p>gridColumnEnd is { gridColumnEnd }.</p>
 						<InnerBlocks />
 					</div>
 					<div className="hb__landingSection_backdrop">
@@ -150,10 +150,15 @@ registerBlockType( 'hb/landing-section', {
 					>
 						<PanelRow>
 							<IconSettingsCSSGridTracksLR />
-
 						</PanelRow>
 						<PanelRow>
-							<SelectControlGridLeft />
+							<SelectControlGridColumnAll 
+								id="SelectControlGridColumnAll"
+								disabled="{ disabled }"
+								onChange={ updateGridColumnAll }
+							/>
+						</PanelRow>
+						<PanelRow>
 							<SelectControl
 								label="Left"
 								labelPosition="left"
@@ -163,11 +168,12 @@ registerBlockType( 'hb/landing-section', {
 									{ label: '1:1 Square', value: 'oneone' },
 									{ label: '3:2 Wide', value: 'threetwo' },
 									{ label: '16:9 Cinema', value: 'sixteennine' },
-									{ label: 'Full Width', value: 'full' },
-									{ label: 'Custom', value: 'disabled' },
+									{ label: 'Full Width', value: 'full' }
 								] }
 								onChange={ updateGridColumnStart }
 							/>
+						</PanelRow>
+						<PanelRow>
 							<SelectControl
 								label="Right"
 								labelPosition="left"
@@ -177,10 +183,10 @@ registerBlockType( 'hb/landing-section', {
 									{ label: '1:1 Square', value: 'oneone' },
 									{ label: '3:2 Wide', value: 'threetwo' },
 									{ label: '16:9 Cinema', value: 'sixteennine' },
-									{ label: 'Full Width', value: 'full' },
-									{ label: 'Custom', value: 'disabled' },
+									{ label: 'Full Width', value: 'full' }
 								] }
 								onChange={ updateGridColumnEnd }
+
 							/>
 						</PanelRow>
 						<PanelRow>
@@ -212,12 +218,13 @@ registerBlockType( 'hb/landing-section', {
 
 			<section { ...blockProps }>
 
-				<div className="hb__landingSection_content" >
-					<p>gridColumnStart is { attributes.gridColumnStart }.</p>
-					<p>gridColumnEnd is { attributes.gridColumnEnd }.</p>
+				<div className="hb__landingSection_content" style={ gridPosStyle }>
+					<p>gridColumnStart is { gridColumnStart }.</p>
+					<p>gridColumnEnd is { gridColumnEnd }.</p>
 					<InnerBlocks />
 				</div>
 				<div className="hb__landingSection_backdrop">
+					<InnerBlocks />
 				</div>
 
 			</section>
