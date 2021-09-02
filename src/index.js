@@ -45,7 +45,8 @@ registerBlockType( 'hb/landing-section', {
 			gridColumnStart,
 			gridColumnEnd,
 			gridColumnAll,
-			minHeight
+			minHeight,
+			disabled
 		} = attributes
 
 		// Create an object to use as inline CSS styles

@@ -8098,7 +8098,8 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_5__["registerBlockType"])('hb/
       gridColumnStart,
       gridColumnEnd,
       gridColumnAll,
-      minHeight
+      minHeight,
+      disabled
     } = attributes; // Create an object to use as inline CSS styles
 
     const gridPosStyle = {
