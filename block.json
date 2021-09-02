@@ -26,18 +26,12 @@
 			"attribute": "style.gridColumnEnd",
 			"default": "oneone-r"
 		},
-		"gridColumnAll": {
-			"enum": [ "oneone", "threetwo", "sixteennine", "full", "disabled" ],
+		"gridColumn": {
+			"enum": [ "oneone", "threetwo", "sixteennine", "full", "custom" ],
 			"source": "attribute",
 			"selector": "section",
-			"attribute": "style.gridColumnEnd",
+			"attribute": "style.gridColumn",
 			"default": "oneone"
-		},
-		"disabled": {
-			"type": "boolean",
-			"source": "attribute",
-			"selector": "SelectControlGridLeft",
-			"attribute": "disabled"
 		},
 		"minHeight": {
 			"type": "string",
@@ -45,6 +39,12 @@
 			"selector": ".hb__landingSection_content",
 			"attribute": "style.minHeight",
 			"default": "60px"
+		},
+		"inlineGridStyleTest": {
+			"type": "array",
+			"source": "attribute",
+			"selector": ".hb__landingSection_content",
+			"attribute": "style",
 		}
 	},
 	"supports": {

@@ -23,8 +23,8 @@ import { __ } from '@wordpress/i18n';
 import { registerBlockType } from '@wordpress/blocks';
 import { help } from '@wordpress/icons';
 import { useBlockProps, InnerBlocks, InspectorControls } from '@wordpress/block-editor';
-import { Button, SelectControl, PanelBody, PanelRow } from '@wordpress/components';
-import { useState } from '@wordpress/element';
+import { Button, SelectControl, Panel, PanelBody, PanelRow } from '@wordpress/components';
+import { useState, Fragment } from '@wordpress/element';
 
 
 /**
@@ -35,6 +35,8 @@ registerBlockType( 'hb/landing-section', {
 	// Handle the editor block rendering
 	edit: ( { attributes, setAttributes, isSelected } ) => {
 
+		const props = attributes;
+
 		// Add custom classname to json properties
         const blockProps = useBlockProps( {
             className: 'hb__landingSection',
@@ -44,68 +46,37 @@ registerBlockType( 'hb/landing-section', {
 		const {
 			gridColumnStart,
 			gridColumnEnd,
-			gridColumnAll,
+			gridColumn,
 			minHeight
-		} = attributes
+		} = props
 
-		// Create an object to use as inline CSS styles
-		const gridPosStyle = {
+		// Define object to use as inline CSS styles
+		const inlineGridStyle = {
 			gridColumnStart: gridColumnStart,
 			gridColumnEnd: gridColumnEnd,
 			minHeight: minHeight
 		};
 
-		// Get the CSS column values without the -l or -r suffixes
-		let gridColumnStartTrack = gridColumnStart.split("-")[0];
-		let gridColumnEndTrack = gridColumnEnd.split("-")[0];
 
-		// Test if they match, and assign the result to gridColumnAll
-		setAttributes( { gridColumnAll: gridColumnStartTrack === gridColumnEndTrack ? gridColumnStartTrack : false } );
-
-
-		// Handle setting vars on user option selection
-		const updateGridColumnAll = ( newValue ) => {
-			setAttributes( { 
-				gridColumnAll: newValue,
-				gridColumnStart: newValue + '-l',
-				gridColumnEnd: newValue + '-r'
-			} );
-			useState( gridColumnAll );
+		const checkForGridColumnMatch = () => {
+			// Test if column values match, and assign the result to gridColumn
+			setAttributes( { gridColumn: gridColumnStart.split("-")[0] === gridColumnEnd.split("-")[0] ? gridColumnStart.split("-")[0] : 'custom' } );
 		};
-		const updateGridColumnStart = ( newValue ) => {
-			setAttributes( { 
-				gridColumnStart: newValue + '-l'
-			} );
-			useState( gridColumnStart );
-		};
-		const updateGridColumnEnd = ( newValue ) => {
-			setAttributes( { 
-				gridColumnEnd: newValue + '-r'
-			} );
-			useState( gridColumnEnd );
-		};
+		checkForGridColumnMatch();
 
 
-		const SelectControlGridColumnAll = () => {
-			const [ gridColumnAll, setGridColumnAll ] = useState( 'oneone' );
-		 
-			return (
-				<SelectControl
-					label="Test"
-					value={ gridColumnAll }
-					options={ [
-						{ label: '1:1 Square', value: 'oneone' },
-						{ label: '3:2 Wide', value: 'threetwo' },
-						{ label: '16:9 Cinema', value: 'sixteennine' },
-						{ label: 'Full Width', value: 'full' },
-						{ label: 'Custom', value: 'disabled' },
-					] }
-					onChange={ ( newGridColumnAll ) => setGridColumnAll( newGridColumnAll ) }
-			
-				/>
-			);
-		};
+		const options= [
+			{ label: '1:1 Square', value: 'oneone' },
+			{ label: '3:2 Wide', value: 'threetwo' },
+			{ label: '16:9 Cinema', value: 'sixteennine' },
+			{ label: 'Full Width', value: 'full' }
+		];
 
+
+		const optionsExtended= [
+			...options,
+			{ label: 'Custom', value: 'custom', disabled: true }
+		];
 
 
 		// Build the editor css grid visual aid
@@ -123,6 +94,7 @@ registerBlockType( 'hb/landing-section', {
 			);
 		}
 
+
 		/* Build JSX block for the editor */
 		return (
 			<>
@@ -132,9 +104,9 @@ registerBlockType( 'hb/landing-section', {
 					{ isSelected && (
 						<BorderDivs />
 					) }
-					<div className="hb__landingSection_content" style={ gridPosStyle }>
-						<p>gridColumnStart is { gridColumnStart }.</p>
-						<p>gridColumnEnd is { gridColumnEnd }.</p>
+					<div className="hb__landingSection_content" style={ inlineGridStyle }>
+						<p>gridColumnStart is { props.gridColumnStart }.</p>
+						<p>gridColumnEnd is { props.gridColumnEnd }.</p>
 						<InnerBlocks />
 					</div>
 					<div className="hb__landingSection_backdrop">
@@ -152,41 +124,41 @@ registerBlockType( 'hb/landing-section', {
 							<IconSettingsCSSGridTracksLR />
 						</PanelRow>
 						<PanelRow>
-							<SelectControlGridColumnAll 
-								id="SelectControlGridColumnAll"
-								disabled="{ disabled }"
-								onChange={ updateGridColumnAll }
+							<SelectControl
+								label="gridColumn"
+								labelPosition="Left"
+								title="gridColumn"
+								value={ props.gridColumn }
+								options={ optionsExtended }
+								onChange={ ( value ) => setAttributes( { 
+									gridColumn: value,
+									gridColumnStart: value + '-l',
+									gridColumnEnd: value + '-r'
+								} ) }
 							/>
 						</PanelRow>
 						<PanelRow>
 							<SelectControl
-								label="Left"
+								label="gridColumnStart"
 								labelPosition="left"
-								title="Left Edge"
-								value={ gridColumnStart }
-								options={ [
-									{ label: '1:1 Square', value: 'oneone' },
-									{ label: '3:2 Wide', value: 'threetwo' },
-									{ label: '16:9 Cinema', value: 'sixteennine' },
-									{ label: 'Full Width', value: 'full' }
-								] }
-								onChange={ updateGridColumnStart }
+								title="gridColumnStart"
+								value={ props.gridColumnStart }
+								options={ options }
+								onChange={ ( value ) => setAttributes( {
+									gridColumnStart: value + '-l'
+								} ) }
 							/>
 						</PanelRow>
 						<PanelRow>
 							<SelectControl
-								label="Right"
+								label="gridColumnEnd"
 								labelPosition="left"
-								title="Right Edge"
-								value={ gridColumnEnd }
-								options={ [
-									{ label: '1:1 Square', value: 'oneone' },
-									{ label: '3:2 Wide', value: 'threetwo' },
-									{ label: '16:9 Cinema', value: 'sixteennine' },
-									{ label: 'Full Width', value: 'full' }
-								] }
-								onChange={ updateGridColumnEnd }
-
+								title="gridColumnEnd"
+								value={ props.gridColumnEnd }
+								options={ options }
+								onChange={ ( value ) => setAttributes( {
+									gridColumnEnd: value + '-r'
+								} ) }
 							/>
 						</PanelRow>
 						<PanelRow>
@@ -218,7 +190,7 @@ registerBlockType( 'hb/landing-section', {
 
 			<section { ...blockProps }>
 
-				<div className="hb__landingSection_content" style={ gridPosStyle }>
+				<div className="hb__landingSection_content" style={ inlineGridStyle }>
 					<p>gridColumnStart is { gridColumnStart }.</p>
 					<p>gridColumnEnd is { gridColumnEnd }.</p>
 					<InnerBlocks />

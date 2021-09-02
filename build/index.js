@@ -8089,7 +8089,8 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_5__["registerBlockType"])('hb/
     setAttributes,
     isSelected
   }) => {
-    // Add custom classname to json properties
+    const props = attributes; // Add custom classname to json properties
+
     const blockProps = Object(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_7__["useBlockProps"])({
       className: 'hb__landingSection'
     }); // Declare the attribute array objects as vars for later use
@@ -8097,71 +8098,42 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_5__["registerBlockType"])('hb/
     const {
       gridColumnStart,
       gridColumnEnd,
-      gridColumnAll,
+      gridColumn,
       minHeight
-    } = attributes; // Create an object to use as inline CSS styles
+    } = props; // Define object to use as inline CSS styles
 
-    const gridPosStyle = {
+    const inlineGridStyle = {
       gridColumnStart: gridColumnStart,
       gridColumnEnd: gridColumnEnd,
       minHeight: minHeight
-    }; // Get the CSS column values without the -l or -r suffixes
-
-    let gridColumnStartTrack = gridColumnStart.split("-")[0];
-    let gridColumnEndTrack = gridColumnEnd.split("-")[0]; // Test if they match, and assign the result to gridColumnAll
-
-    setAttributes({
-      gridColumnAll: gridColumnStartTrack === gridColumnEndTrack ? gridColumnStartTrack : false
-    }); // Handle setting vars on user option selection
-
-    const updateGridColumnAll = newValue => {
-      setAttributes({
-        gridColumnAll: newValue,
-        gridColumnStart: newValue + '-l',
-        gridColumnEnd: newValue + '-r'
-      });
-      Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["useState"])(gridColumnAll);
     };
 
-    const updateGridColumnStart = newValue => {
+    const checkForGridColumnMatch = () => {
+      // Test if column values match, and assign the result to gridColumn
       setAttributes({
-        gridColumnStart: newValue + '-l'
+        gridColumn: gridColumnStart.split("-")[0] === gridColumnEnd.split("-")[0] ? gridColumnStart.split("-")[0] : 'custom'
       });
-      Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["useState"])(gridColumnStart);
     };
 
-    const updateGridColumnEnd = newValue => {
-      setAttributes({
-        gridColumnEnd: newValue + '-r'
-      });
-      Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["useState"])(gridColumnEnd);
-    };
-
-    const SelectControlGridColumnAll = () => {
-      const [gridColumnAll, setGridColumnAll] = Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["useState"])('oneone');
-      return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_8__["SelectControl"], {
-        label: "Test",
-        value: gridColumnAll,
-        options: [{
-          label: '1:1 Square',
-          value: 'oneone'
-        }, {
-          label: '3:2 Wide',
-          value: 'threetwo'
-        }, {
-          label: '16:9 Cinema',
-          value: 'sixteennine'
-        }, {
-          label: 'Full Width',
-          value: 'full'
-        }, {
-          label: 'Custom',
-          value: 'disabled'
-        }],
-        onChange: newGridColumnAll => setGridColumnAll(newGridColumnAll)
-      });
-    }; // Build the editor css grid visual aid
-
+    checkForGridColumnMatch();
+    const options = [{
+      label: '1:1 Square',
+      value: 'oneone'
+    }, {
+      label: '3:2 Wide',
+      value: 'threetwo'
+    }, {
+      label: '16:9 Cinema',
+      value: 'sixteennine'
+    }, {
+      label: 'Full Width',
+      value: 'full'
+    }];
+    const optionsExtended = [...options, {
+      label: 'Custom',
+      value: 'custom',
+      disabled: true
+    }]; // Build the editor css grid visual aid
 
     const BorderDivs = () => {
       const numbers = [1, 2, 3, 4, 5, 6, 7];
@@ -8179,54 +8151,41 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_5__["registerBlockType"])('hb/
 
     return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["Fragment"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("section", blockProps, isSelected && Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(BorderDivs, null), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
       className: "hb__landingSection_content",
-      style: gridPosStyle
-    }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, "gridColumnStart is ", gridColumnStart, "."), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, "gridColumnEnd is ", gridColumnEnd, "."), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_7__["InnerBlocks"], null)), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
+      style: inlineGridStyle
+    }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, "gridColumnStart is ", props.gridColumnStart, "."), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, "gridColumnEnd is ", props.gridColumnEnd, "."), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_7__["InnerBlocks"], null)), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
       className: "hb__landingSection_backdrop"
     }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_7__["InnerBlocks"], null))), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_7__["InspectorControls"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_8__["PanelBody"], {
       title: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__["__"])('Width and Position'),
       initialOpen: true
-    }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_8__["PanelRow"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_svg_icons_js__WEBPACK_IMPORTED_MODULE_3__["IconSettingsCSSGridTracksLR"], null)), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_8__["PanelRow"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(SelectControlGridColumnAll, {
-      id: "SelectControlGridColumnAll",
-      disabled: "{ disabled }",
-      onChange: updateGridColumnAll
+    }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_8__["PanelRow"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_svg_icons_js__WEBPACK_IMPORTED_MODULE_3__["IconSettingsCSSGridTracksLR"], null)), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_8__["PanelRow"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_8__["SelectControl"], {
+      label: "gridColumn",
+      labelPosition: "Left",
+      title: "gridColumn",
+      value: props.gridColumn,
+      options: optionsExtended,
+      onChange: value => setAttributes({
+        gridColumn: value,
+        gridColumnStart: value + '-l',
+        gridColumnEnd: value + '-r'
+      })
     })), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_8__["PanelRow"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_8__["SelectControl"], {
-      label: "Left",
+      label: "gridColumnStart",
       labelPosition: "left",
-      title: "Left Edge",
-      value: gridColumnStart,
-      options: [{
-        label: '1:1 Square',
-        value: 'oneone'
-      }, {
-        label: '3:2 Wide',
-        value: 'threetwo'
-      }, {
-        label: '16:9 Cinema',
-        value: 'sixteennine'
-      }, {
-        label: 'Full Width',
-        value: 'full'
-      }],
-      onChange: updateGridColumnStart
+      title: "gridColumnStart",
+      value: props.gridColumnStart,
+      options: options,
+      onChange: value => setAttributes({
+        gridColumnStart: value + '-l'
+      })
     })), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_8__["PanelRow"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_8__["SelectControl"], {
-      label: "Right",
+      label: "gridColumnEnd",
       labelPosition: "left",
-      title: "Right Edge",
-      value: gridColumnEnd,
-      options: [{
-        label: '1:1 Square',
-        value: 'oneone'
-      }, {
-        label: '3:2 Wide',
-        value: 'threetwo'
-      }, {
-        label: '16:9 Cinema',
-        value: 'sixteennine'
-      }, {
-        label: 'Full Width',
-        value: 'full'
-      }],
-      onChange: updateGridColumnEnd
+      title: "gridColumnEnd",
+      value: props.gridColumnEnd,
+      options: options,
+      onChange: value => setAttributes({
+        gridColumnEnd: value + '-r'
+      })
     })), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_8__["PanelRow"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_8__["Button"], {
       icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_6__["help"],
       label: "Help",
@@ -8244,7 +8203,7 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_5__["registerBlockType"])('hb/
 
     return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("section", blockProps, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
       className: "hb__landingSection_content",
-      style: gridPosStyle
+      style: inlineGridStyle
     }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, "gridColumnStart is ", gridColumnStart, "."), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, "gridColumnEnd is ", gridColumnEnd, "."), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_7__["InnerBlocks"], null)), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
       className: "hb__landingSection_backdrop"
     }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_7__["InnerBlocks"], null)));
