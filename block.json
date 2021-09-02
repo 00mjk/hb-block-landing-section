@@ -44,7 +44,7 @@
 			"type": "array",
 			"source": "attribute",
 			"selector": ".hb__landingSection_content",
-			"attribute": "style",
+			"attribute": "style"
 		}
 	},
 	"supports": {
