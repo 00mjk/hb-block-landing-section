@@ -12,39 +12,15 @@
 	"editorStyle": "file:./build/index.css",
 	"style": "file:./build/style-index.css",
 	"attributes": {
-		"gridColumnStart": {
-			"enum": [ "oneone-l", "threetwo-l", "sixteennine-l", "full-l" ],
-			"source": "attribute",
-			"selector": "section",
-			"attribute": "style.gridColumnStart",
-			"default": "oneone-l"
-		},
-		"gridColumnEnd": {
-			"enum": [ "oneone-r", "threetwo-r", "sixteennine-r", "full-r" ],
-			"source": "attribute",
-			"selector": "section",
-			"attribute": "style.gridColumnEnd",
-			"default": "oneone-r"
-		},
-		"gridColumn": {
-			"enum": [ "oneone", "threetwo", "sixteennine", "full", "custom" ],
-			"source": "attribute",
-			"selector": "section",
-			"attribute": "style.gridColumn",
-			"default": "oneone"
-		},
-		"minHeight": {
-			"type": "string",
+		"inlineStyle": {
+			"type": "object",
 			"source": "attribute",
 			"selector": ".hb__landingSection_content",
-			"attribute": "style.minHeight",
-			"default": "60px"
-		},
-		"inlineGridStyleTest": {
-			"type": "array",
-			"source": "attribute",
-			"selector": ".hb__landingSection_content",
-			"attribute": "style"
+			"attribute": "style",
+				"default": { 
+					"gridColumn": "oneone-l / oneone-r",
+					"minHeight": "60px"
+			}
 		}
 	},
 	"supports": {
