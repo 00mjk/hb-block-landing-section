@@ -50,9 +50,9 @@ registerBlockType( 'hb/landing-section', {
 		// Test if column start/end match, and assign the result to selectGridColumn
 		const setSelectValuesAndAttribute = (() => {
 
-				selectGridStart = selectGridStart ? selectGridStart : inlineStyle.gridColumn.split(" ")[0];
-				selectGridEnd = selectGridEnd ? selectGridEnd : inlineStyle.gridColumn.split(" ")[2];
-				selectGridColumn = selectGridStart.split('-')[0] === selectGridEnd.split('-')[0] ? selectGridStart.split('-')[0] : false;
+			selectGridStart = selectGridStart ? selectGridStart : inlineStyle.gridColumn.split(" ")[0];
+			selectGridEnd = selectGridEnd ? selectGridEnd : inlineStyle.gridColumn.split(" ")[2];
+			selectGridColumn = selectGridStart.split('-')[0] === selectGridEnd.split('-')[0] ? selectGridStart.split('-')[0] : false;
 
 		console.log('BOTH selectGridStart: ' + selectGridStart + ' selectGridEnd: ' + selectGridEnd + ' selectGridColumn: ' + selectGridColumn);
 
@@ -222,12 +222,11 @@ registerBlockType( 'hb/landing-section', {
 
 			<section { ...blockProps }>
 
-				<div className="hb__landingSection_content" {...style}>
-					<p> { /* meh */ } </p>
-					{/*<InnerBlocks />*/}
+				<div className="hb__landingSection_content" style={{ ...inlineStyle }}>
+					<InnerBlocks />
 				</div>
 				<div className="hb__landingSection_backdrop">
-					{/*<InnerBlocks />*/}
+					<InnerBlocks />
 				</div>
 
 			</section>

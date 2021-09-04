@@ -50,6 +50,7 @@
   grid-template-columns: [full-l] 1fr [sixteennine-l threetwo-l oneone-l] calc(100% - 2 * var(--hb_gutters)) [oneone-r threetwo-r sixteennine-r] 1fr [full-r];
   justify-content: center;
   width: 100%;
+  max-width: 100vw;
   text-align: center;
 }
 
