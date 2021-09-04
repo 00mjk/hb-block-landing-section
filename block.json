@@ -12,15 +12,27 @@
 	"editorStyle": "file:./build/index.css",
 	"style": "file:./build/style-index.css",
 	"attributes": {
-		"inlineStyle": {
-			"type": "object",
+		"contentDivClasses": {
+			"type": "string",
 			"source": "attribute",
 			"selector": ".hb__landingSection_content",
-			"attribute": "style",
-				"default": { 
-					"gridColumn": "oneone-l / oneone-r",
-					"minHeight": "60px"
-			}
+			"attribute": "class",
+			"default": "hb__landingSection_content oneone-l oneone-r"
+		},
+		"selectControlStart": {
+			"type": "string",
+			"enum": [ "oneone-l", "threetwo-l", "sixteennine-l", "full-l" ],
+			"default": "oneone-l"
+		},
+		"selectControlEnd": {
+			"type": "string",
+			"enum": [ "oneone-r", "threetwo-r", "sixteennine-r", "full-r"  ],
+			"default": "oneone-r"
+		},
+		"selectControlBoth": {
+			"type": "string",
+			"enum": [ "oneone", "threetwo", "sixteennine", "full", "Custom" ],
+			"default": "oneone"
 		}
 	},
 	"supports": {

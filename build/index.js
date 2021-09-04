@@ -8077,7 +8077,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
 /**
  * Register the block "hb/landing-section".
  */
@@ -8089,38 +8088,43 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_5__["registerBlockType"])('hb/
     setAttributes,
     isSelected
   }) => {
-    // Declare the attribute array objects as vars for later use
-    // wp attributes === React props
-    let {
-      inlineStyle
-    } = attributes;
-    let selectGridStart, selectGridEnd, selectGridColumn; // Test if column start/end match, and assign the result to selectGridColumn
+    const {
+      inlineStyle,
+      contentDivClasses,
+      selectControlStart,
+      selectControlEnd,
+      selectControlBoth
+    } = attributes; // selectControlValues
 
-    const setSelectValuesAndAttribute = (() => {
-      selectGridStart = selectGridStart ? selectGridStart : inlineStyle.gridColumn.split(" ")[0];
-      selectGridEnd = selectGridEnd ? selectGridEnd : inlineStyle.gridColumn.split(" ")[2];
-      selectGridColumn = selectGridStart.split('-')[0] === selectGridEnd.split('-')[0] ? selectGridStart.split('-')[0] : false;
-      console.log('BOTH selectGridStart: ' + selectGridStart + ' selectGridEnd: ' + selectGridEnd + ' selectGridColumn: ' + selectGridColumn);
-      setAttributes(inlineStyle.gridColumn = selectGridStart + ' / ' + selectGridEnd);
-    })();
+    let newContentDivClasses, newSelectControlBoth, newSelectControlStart, newSelectControlEnd;
+    newSelectControlBoth = selectControlStart.split('-')[0] == selectControlEnd.split('-')[0] ? selectControlStart.split('-')[0] : false;
+    setAttributes({
+      selectControlBoth: newSelectControlBoth
+    });
 
-    const updateColumnStart = value => {
-      console.log('START selectGridStart: ' + selectGridStart + ' selectGridEnd: ' + selectGridEnd + ' selectGridColumn: ' + selectGridColumn);
+    const test = () => {
+      newSelectControlStart = selectControlBoth + '-l';
       setAttributes({
-        inlineStyle: { ...inlineStyle,
-          gridColumn: value + ' / ' + selectGridEnd
-        }
+        selectControlStart: newSelectControlStart
+      });
+      newSelectControlEnd = selectControlBoth + '-r';
+      setAttributes({
+        selectControlEnd: newSelectControlEnd
       });
     };
 
-    const updateColumnEnd = value => {
-      console.log('END selectGridStart: ' + selectGridStart + ' selectGridEnd: ' + selectGridEnd + ' selectGridColumn: ' + selectGridColumn);
+    console.log('selectControlStart: ' + selectControlStart);
+    console.log('selectControlEnd: ' + selectControlEnd);
+    console.log('selectControlBoth: ' + selectControlBoth); // Set contentDivClasses attribute
+
+    const setClasses = (() => {
+      // Build classes from selectControl values
+      newContentDivClasses = 'hb__landingSection_content ' + selectControlStart + ' ' + selectControlEnd;
       setAttributes({
-        inlineStyle: { ...inlineStyle,
-          gridColumn: selectGridStart + ' / ' + value
-        }
+        contentDivClasses: newContentDivClasses
       });
-    }; // Options for the select controls
+      console.log('contentDivClasses ' + contentDivClasses);
+    })(); // Options for the select controls
 
 
     const options = position => [{
@@ -8155,17 +8159,16 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_5__["registerBlockType"])('hb/
         key: number.toString()
       }));
       return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["Fragment"], null, divs);
-    }; // Add custom classname to json properties
+    }; // Add classname to props
 
 
-    const blockProps = Object(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_7__["useBlockProps"])({
+    const blockProps = _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_7__["useBlockProps"].save({
       className: 'hb__landingSection'
     }); // Build JSX block for the editor
 
     return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["Fragment"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("section", blockProps, isSelected && Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(BorderDivs, null), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
-      className: "hb__landingSection_content",
-      style: inlineStyle
-    }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, "selectGridColumn is ", selectGridColumn, "."), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, "selectGridStart is ", selectGridStart, "."), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, "selectGridEnd is ", selectGridEnd, "."), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_7__["InnerBlocks"], null)), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
+      className: contentDivClasses
+    }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, "selectControlBoth is ", selectControlBoth, "."), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, "selectControlStart is ", selectControlStart, "."), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, "selectControlEnd is ", selectControlEnd, "."), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_7__["InnerBlocks"], null)), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
       className: "hb__landingSection_backdrop"
     }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_7__["InnerBlocks"], null))), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_7__["InspectorControls"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_8__["PanelBody"], {
       title: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__["__"])('Width and Position'),
@@ -8174,29 +8177,29 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_5__["registerBlockType"])('hb/
       label: "gridColumn",
       labelPosition: "Left",
       title: "gridColumn",
-      value: selectGridColumn,
+      value: selectControlBoth,
       options: optionsExtended,
-      onChange: value => {
-        setAttributes({
-          inlineStyle: { ...inlineStyle,
-            gridColumn: value + '-l / ' + value + '-r'
-          }
-        });
-      }
+      onChange: (value => setAttributes({
+        selectControlBoth: value
+      }), test)
     })), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_8__["PanelRow"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_8__["SelectControl"], {
       label: "gridColumnStart",
       labelPosition: "left",
       title: "gridColumnStart",
-      value: selectGridStart,
+      value: selectControlStart,
       options: optionsStart,
-      onChange: updateColumnStart
+      onChange: value => setAttributes({
+        selectControlStart: value
+      })
     })), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_8__["PanelRow"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_8__["SelectControl"], {
       label: "gridColumnEnd",
       labelPosition: "left",
       title: "gridColumnEnd",
-      value: selectGridEnd,
+      value: selectControlEnd,
       options: optionsEnd,
-      onChange: updateColumnEnd
+      onChange: value => setAttributes({
+        selectControlEnd: value
+      })
     })), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_8__["PanelRow"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_8__["Button"], {
       icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_6__["help"],
       label: "Help",
@@ -8211,18 +8214,13 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_5__["registerBlockType"])('hb/
     } = attributes; // Add classname to props
 
     const blockProps = _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_7__["useBlockProps"].save({
-      className: 'hb__landingSection',
-      style: {
-        "gridColumnStart": inlineStyle.newGridColumnStart,
-        "gridColumnEnd": inlineStyle.newGridColumnEnd
-      }
+      className: 'hb__landingSection'
     });
     console.log(...style); // Build JSX block for front end mark up
 
     return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("section", blockProps, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
-      className: "hb__landingSection_content",
-      style: { ...inlineStyle
-      }
+      className: contentDivClasses,
+      style: inlineStyle
     }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_7__["InnerBlocks"], null)), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
       className: "hb__landingSection_backdrop"
     }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_7__["InnerBlocks"], null)));

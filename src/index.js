@@ -23,10 +23,7 @@ import { __ } from '@wordpress/i18n';
 import { registerBlockType } from '@wordpress/blocks';
 import { help } from '@wordpress/icons';
 import { useBlockProps, InnerBlocks, InspectorControls } from '@wordpress/block-editor';
-import { Button, SelectControl, Panel, PanelBody, PanelRow } from '@wordpress/components';
-import { useState, Fragment } from '@wordpress/element';
-
-
+import { Button, SelectControl, PanelBody, PanelRow } from '@wordpress/components';
 
 /**
  * Register the block "hb/landing-section".
@@ -36,50 +33,49 @@ registerBlockType( 'hb/landing-section', {
 	// Handle the editor block rendering
 	edit: ( { attributes, setAttributes, isSelected } ) => {
 
-		// Declare the attribute array objects as vars for later use
-		// wp attributes === React props
-		let {
-			inlineStyle
+		const {
+			inlineStyle,
+			contentDivClasses,
+			selectControlStart,
+			selectControlEnd,
+			selectControlBoth
 		} = attributes
 
-		let selectGridStart,
-			selectGridEnd,
-			selectGridColumn;
+		// selectControlValues
+		let newContentDivClasses,
+			newSelectControlBoth,
+			newSelectControlStart,
+			newSelectControlEnd;
+
+		newSelectControlBoth = 
+			selectControlStart.split('-')[0] == 
+			selectControlEnd.split('-')[0] ? 
+			selectControlStart.split('-')[0] : false;
+		setAttributes( { selectControlBoth: newSelectControlBoth } );
+
+		const test = () => {
+			newSelectControlStart = selectControlBoth + '-l';
+			setAttributes( { selectControlStart: newSelectControlStart } );
+			newSelectControlEnd = selectControlBoth + '-r';
+			setAttributes( { selectControlEnd: newSelectControlEnd } );			
+		}
 
 
-		// Test if column start/end match, and assign the result to selectGridColumn
-		const setSelectValuesAndAttribute = (() => {
 
-			selectGridStart = selectGridStart ? selectGridStart : inlineStyle.gridColumn.split(" ")[0];
-			selectGridEnd = selectGridEnd ? selectGridEnd : inlineStyle.gridColumn.split(" ")[2];
-			selectGridColumn = selectGridStart.split('-')[0] === selectGridEnd.split('-')[0] ? selectGridStart.split('-')[0] : false;
+		console.log('selectControlStart: ' + selectControlStart);
+		console.log('selectControlEnd: ' + selectControlEnd);
+		console.log('selectControlBoth: ' + selectControlBoth);
 
-		console.log('BOTH selectGridStart: ' + selectGridStart + ' selectGridEnd: ' + selectGridEnd + ' selectGridColumn: ' + selectGridColumn);
+		// Set contentDivClasses attribute
+		const setClasses = (() => {
 
-			setAttributes( inlineStyle.gridColumn = selectGridStart + ' / ' + selectGridEnd );
+			// Build classes from selectControl values
+			newContentDivClasses = 'hb__landingSection_content ' + selectControlStart + ' ' + selectControlEnd;
+			setAttributes( { contentDivClasses: newContentDivClasses} );
+
+			console.log('contentDivClasses ' + contentDivClasses);
+
 		})();
-
-
-
-		const updateColumnStart = ( value ) => {
-		console.log('START selectGridStart: ' + selectGridStart + ' selectGridEnd: ' + selectGridEnd + ' selectGridColumn: ' + selectGridColumn);
-			setAttributes( { 
-				inlineStyle: {
-					...inlineStyle,
-					gridColumn: value + ' / ' + selectGridEnd,
-				}
-		    } )
-		};
-
-		const updateColumnEnd = ( value ) => {
-		console.log('END selectGridStart: ' + selectGridStart + ' selectGridEnd: ' + selectGridEnd + ' selectGridColumn: ' + selectGridColumn);
-			setAttributes( { 
-				inlineStyle: {
-					...inlineStyle,
-					gridColumn: selectGridStart + ' / ' + value,
-				}
-			} )
-		};
 
 		// Options for the select controls
 		const options = (position) => [
@@ -110,8 +106,8 @@ registerBlockType( 'hb/landing-section', {
 			);
 		}
 
-		// Add custom classname to json properties
-		const blockProps = useBlockProps( {
+		// Add classname to props
+		const blockProps = useBlockProps.save( {
 			className: 'hb__landingSection',
 		} );
 
@@ -124,12 +120,12 @@ registerBlockType( 'hb/landing-section', {
 					{ isSelected && (
 						<BorderDivs />
 					) }
-					<div className="hb__landingSection_content" style={ inlineStyle }>
-						<p>selectGridColumn is { selectGridColumn }.</p>
-						<p>selectGridStart is { selectGridStart }.</p>
-						<p>selectGridEnd is { selectGridEnd }.</p>
-						<InnerBlocks />
 
+					<div className={ contentDivClasses } >
+						<p>selectControlBoth is { selectControlBoth }.</p>
+						<p>selectControlStart is { selectControlStart }.</p>
+						<p>selectControlEnd is { selectControlEnd }.</p>
+						<InnerBlocks />
 					</div>
 					<div className="hb__landingSection_backdrop">
 						<InnerBlocks />
@@ -150,16 +146,9 @@ registerBlockType( 'hb/landing-section', {
 								label="gridColumn"
 								labelPosition="Left"
 								title="gridColumn"
-								value={ selectGridColumn }
+								value={ selectControlBoth }
 								options={ optionsExtended }
-								onChange={ ( value ) => {
-									setAttributes( { 
-										inlineStyle: {
-											...inlineStyle,
-											gridColumn: value + '-l / ' + value + '-r'
-										}
-									} );
-								}}
+								onChange={ (value) => setAttributes( { selectControlBoth: value } ), test }
 							/>
 						</PanelRow>
 						<PanelRow>
@@ -167,9 +156,9 @@ registerBlockType( 'hb/landing-section', {
 								label="gridColumnStart"
 								labelPosition="left"
 								title="gridColumnStart"
-								value={ selectGridStart }
+								value={ selectControlStart }
 								options={ optionsStart }
-								onChange={ updateColumnStart }
+								onChange={ (value) => setAttributes( { selectControlStart: value } ) }
 							/>
 						</PanelRow>
 						<PanelRow>
@@ -177,9 +166,9 @@ registerBlockType( 'hb/landing-section', {
 								label="gridColumnEnd"
 								labelPosition="left"
 								title="gridColumnEnd"
-								value={ selectGridEnd }
+								value={ selectControlEnd }
 								options={ optionsEnd }
-								onChange={ updateColumnEnd }
+								onChange={ (value) => setAttributes( { selectControlEnd: value } ) }
 							/>
 						</PanelRow>
 						<PanelRow>
@@ -209,10 +198,6 @@ registerBlockType( 'hb/landing-section', {
 		// Add classname to props
 		const blockProps = useBlockProps.save( {
 			className: 'hb__landingSection',
-			style: {
-				"gridColumnStart": inlineStyle.newGridColumnStart,
-				"gridColumnEnd": inlineStyle.newGridColumnEnd
-			}
 		} );
 
 		console.log(...style);
@@ -222,7 +207,7 @@ registerBlockType( 'hb/landing-section', {
 
 			<section { ...blockProps }>
 
-				<div className="hb__landingSection_content" style={{ ...inlineStyle }}>
+				<div className={ contentDivClasses } style={ inlineStyle }>
 					<InnerBlocks />
 				</div>
 				<div className="hb__landingSection_backdrop">

@@ -70,14 +70,21 @@
 
 .hb__landingSection_content {
     position: relative;
-    grid-column: var(--col);
-    grid-row: var(--row);
+    grid-row: 1 / -1;
     z-index: 0;
 }
+.oneone-l { grid-column-start: oneone-l; }
+.oneone-r { grid-column-end: oneone-r; }
+.threetwo-l { grid-column-start: threetwo-l; }
+.threetwo-r { grid-column-end: threetwo-r; }
+.sixteennine-l { grid-column-start: sixteennine-l; }
+.sixteennine-r { grid-column-end: sixteennine-r; }
+.full-l { grid-column-start: full-l; }
+.full-r { grid-column-end: full-r; }
 
 .hb__landingSection_backdrop {
     position: absolute;
-    grid-column: 1 / -1;
+    grid-column: 1 / -1; /*Backdrop spans entire section (page-width)*/
     grid-row: 1 / -1;
     z-index: -1;
     width: 100%;
