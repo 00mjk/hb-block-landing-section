@@ -47,34 +47,75 @@ registerBlockType( 'hb/landing-section', {
 			newSelectControlStart,
 			newSelectControlEnd;
 
-		newSelectControlBoth = 
-			selectControlStart.split('-')[0] == 
-			selectControlEnd.split('-')[0] ? 
-			selectControlStart.split('-')[0] : false;
-		setAttributes( { selectControlBoth: newSelectControlBoth } );
+		let init
 
-		const test = () => {
-			newSelectControlStart = selectControlBoth + '-l';
-			setAttributes( { selectControlStart: newSelectControlStart } );
-			newSelectControlEnd = selectControlBoth + '-r';
-			setAttributes( { selectControlEnd: newSelectControlEnd } );			
+		console.log('init1: ' + init)
+
+		if (typeof init === 'undefined') {
+			init = 'complete';
+		
+			console.log('init2: ' + init)
+		
+			newSelectControlBoth = 
+				selectControlStart.split('-')[0] == 
+				selectControlEnd.split('-')[0] ? 
+				selectControlStart.split('-')[0] : false;
+			setAttributes( { selectControlBoth: newSelectControlBoth } );
+
+			console.log('init3: ' + init)
 		}
 
+		const onChangeSelectControlStart = (value) => {
+			testIfSelectControlStartEndSame;
+			setAttributes( { 
+				selectControlStart: value,
+				selectControlBoth: newSelectControlBoth,
+				contentDivClasses: newContentDivClasses
+			} );
 
+			console.log('start')
+		}
 
-		console.log('selectControlStart: ' + selectControlStart);
-		console.log('selectControlEnd: ' + selectControlEnd);
-		console.log('selectControlBoth: ' + selectControlBoth);
+		const onChangeSelectControlEnd = (value) => {
+			testIfSelectControlStartEndSame;
+			setAttributes( { 
+				selectControlEnd: value,
+				selectControlBoth: newSelectControlBoth,
+				contentDivClasses: newContentDivClasses
+			} );
 
-		// Set contentDivClasses attribute
-		const setClasses = (() => {
+			console.log('end')
+		}
 
-			// Build classes from selectControl values
+		const onChangeSelectControlBoth = (value) => {
+			newSelectControlStart = value + '-l';
+			newSelectControlEnd = value + '-r';
+			setAttributes( { 
+				selectControlStart: newSelectControlStart,
+				selectControlEnd: newSelectControlEnd,
+				selectControlBoth: value,
+				contentDivClasses: newContentDivClasses
+			} );
+
+			console.log('both')
+		}
+
+		const testIfSelectControlStartEndSame = () => {
+			newSelectControlBoth = 
+				selectControlStart.split('-')[0] == 
+				selectControlEnd.split('-')[0] ? 
+				selectControlStart.split('-')[0] : false;
+
+			console.log('test')
+		}
+
+		// Set classes from selectControl values
+		const setNewClasses = (() => {
 			newContentDivClasses = 'hb__landingSection_content ' + selectControlStart + ' ' + selectControlEnd;
-			setAttributes( { contentDivClasses: newContentDivClasses} );
-
-			console.log('contentDivClasses ' + contentDivClasses);
-
+			setAttributes( { 
+				contentDivClasses: newContentDivClasses
+			} );
+			console.log('set ' + newContentDivClasses)
 		})();
 
 		// Options for the select controls
@@ -148,7 +189,7 @@ registerBlockType( 'hb/landing-section', {
 								title="gridColumn"
 								value={ selectControlBoth }
 								options={ optionsExtended }
-								onChange={ (value) => setAttributes( { selectControlBoth: value } ), test }
+								onChange={ (value) => onChangeSelectControlBoth( value ) }
 							/>
 						</PanelRow>
 						<PanelRow>
@@ -158,7 +199,7 @@ registerBlockType( 'hb/landing-section', {
 								title="gridColumnStart"
 								value={ selectControlStart }
 								options={ optionsStart }
-								onChange={ (value) => setAttributes( { selectControlStart: value } ) }
+								onChange={ (value) => onChangeSelectControlStart( value ) }
 							/>
 						</PanelRow>
 						<PanelRow>
@@ -168,7 +209,7 @@ registerBlockType( 'hb/landing-section', {
 								title="gridColumnEnd"
 								value={ selectControlEnd }
 								options={ optionsEnd }
-								onChange={ (value) => setAttributes( { selectControlEnd: value } ) }
+								onChange={ (value) => onChangeSelectControlEnd( value ) }
 							/>
 						</PanelRow>
 						<PanelRow>

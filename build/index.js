@@ -8097,33 +8097,63 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_5__["registerBlockType"])('hb/
     } = attributes; // selectControlValues
 
     let newContentDivClasses, newSelectControlBoth, newSelectControlStart, newSelectControlEnd;
-    newSelectControlBoth = selectControlStart.split('-')[0] == selectControlEnd.split('-')[0] ? selectControlStart.split('-')[0] : false;
-    setAttributes({
-      selectControlBoth: newSelectControlBoth
-    });
+    let init;
+    console.log('init1: ' + init);
 
-    const test = () => {
-      newSelectControlStart = selectControlBoth + '-l';
+    if (typeof init === 'undefined') {
+      init = 'complete';
+      console.log('init2: ' + init);
+      newSelectControlBoth = selectControlStart.split('-')[0] == selectControlEnd.split('-')[0] ? selectControlStart.split('-')[0] : false;
       setAttributes({
-        selectControlStart: newSelectControlStart
+        selectControlBoth: newSelectControlBoth
       });
-      newSelectControlEnd = selectControlBoth + '-r';
+      console.log('init3: ' + init);
+    }
+
+    const onChangeSelectControlStart = value => {
+      testIfSelectControlStartEndSame;
       setAttributes({
-        selectControlEnd: newSelectControlEnd
+        selectControlStart: value,
+        selectControlBoth: newSelectControlBoth,
+        contentDivClasses: newContentDivClasses
       });
+      console.log('start');
     };
 
-    console.log('selectControlStart: ' + selectControlStart);
-    console.log('selectControlEnd: ' + selectControlEnd);
-    console.log('selectControlBoth: ' + selectControlBoth); // Set contentDivClasses attribute
+    const onChangeSelectControlEnd = value => {
+      testIfSelectControlStartEndSame;
+      setAttributes({
+        selectControlEnd: value,
+        selectControlBoth: newSelectControlBoth,
+        contentDivClasses: newContentDivClasses
+      });
+      console.log('end');
+    };
 
-    const setClasses = (() => {
-      // Build classes from selectControl values
+    const onChangeSelectControlBoth = value => {
+      newSelectControlStart = value + '-l';
+      newSelectControlEnd = value + '-r';
+      setAttributes({
+        selectControlStart: newSelectControlStart,
+        selectControlEnd: newSelectControlEnd,
+        selectControlBoth: value,
+        contentDivClasses: newContentDivClasses
+      });
+      console.log('both');
+    };
+
+    const testIfSelectControlStartEndSame = () => {
+      newSelectControlBoth = selectControlStart.split('-')[0] == selectControlEnd.split('-')[0] ? selectControlStart.split('-')[0] : false;
+      console.log('test');
+    }; // Set classes from selectControl values
+
+
+    const setNewClasses = (() => {
       newContentDivClasses = 'hb__landingSection_content ' + selectControlStart + ' ' + selectControlEnd;
       setAttributes({
         contentDivClasses: newContentDivClasses
       });
-      console.log('contentDivClasses ' + contentDivClasses);
+      console.log('set ' + newContentDivClasses);
     })(); // Options for the select controls
 
 
@@ -8179,27 +8209,21 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_5__["registerBlockType"])('hb/
       title: "gridColumn",
       value: selectControlBoth,
       options: optionsExtended,
-      onChange: (value => setAttributes({
-        selectControlBoth: value
-      }), test)
+      onChange: value => onChangeSelectControlBoth(value)
     })), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_8__["PanelRow"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_8__["SelectControl"], {
       label: "gridColumnStart",
       labelPosition: "left",
       title: "gridColumnStart",
       value: selectControlStart,
       options: optionsStart,
-      onChange: value => setAttributes({
-        selectControlStart: value
-      })
+      onChange: value => onChangeSelectControlStart(value)
     })), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_8__["PanelRow"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_8__["SelectControl"], {
       label: "gridColumnEnd",
       labelPosition: "left",
       title: "gridColumnEnd",
       value: selectControlEnd,
       options: optionsEnd,
-      onChange: value => setAttributes({
-        selectControlEnd: value
-      })
+      onChange: value => onChangeSelectControlEnd(value)
     })), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_8__["PanelRow"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_8__["Button"], {
       icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_6__["help"],
       label: "Help",
