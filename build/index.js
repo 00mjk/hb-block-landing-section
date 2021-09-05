@@ -8056,6 +8056,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_7__);
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var _wordpress_block_library__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @wordpress/block-library */ "@wordpress/block-library");
+/* harmony import */ var _wordpress_block_library__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(_wordpress_block_library__WEBPACK_IMPORTED_MODULE_9__);
 
 
 /**
@@ -8077,6 +8079,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+
 /**
  * Register the block "hb/landing-section".
  */
@@ -8086,29 +8090,35 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_5__["registerBlockType"])('hb/
   edit: ({
     attributes,
     setAttributes,
-    isSelected
+    isSelected,
+    className
   }) => {
+    const blockProps = _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_7__["useBlockProps"].save({
+      className: 'hb__landingSection'
+    });
     const {
-      inlineStyle,
       contentDivClasses,
       selectControlStart,
       selectControlEnd,
       selectControlBoth
-    } = attributes; // selectControlValues
-
+    } = attributes;
     let newContentDivClasses, newSelectControlBoth, newSelectControlStart, newSelectControlEnd;
-    let init;
-    console.log('init1: ' + init);
+    /**
+     * Init the common select control to match the indv start/end controls.
+     */
 
-    if (typeof init === 'undefined') {
-      init = 'complete';
-      console.log('init2: ' + init);
-      newSelectControlBoth = selectControlStart.split('-')[0] == selectControlEnd.split('-')[0] ? selectControlStart.split('-')[0] : false;
+    newSelectControlBoth = selectControlStart.split('-')[0] == selectControlEnd.split('-')[0] ? selectControlStart.split('-')[0] : false; // only set attr if different
+
+    if (selectControlBoth !== newSelectControlBoth) {
       setAttributes({
         selectControlBoth: newSelectControlBoth
       });
-      console.log('init3: ' + init);
+      console.log('selectControlBoth');
     }
+    /**
+     * Handle grid column start selectControl onChange.
+     */
+
 
     const onChangeSelectControlStart = value => {
       testIfSelectControlStartEndSame;
@@ -8119,6 +8129,10 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_5__["registerBlockType"])('hb/
       });
       console.log('start');
     };
+    /**
+     * Handle grid column end selectControl onChange.
+     */
+
 
     const onChangeSelectControlEnd = value => {
       testIfSelectControlStartEndSame;
@@ -8129,6 +8143,10 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_5__["registerBlockType"])('hb/
       });
       console.log('end');
     };
+    /**
+     * Handle grid column common selectControl onChange.
+     */
+
 
     const onChangeSelectControlBoth = value => {
       newSelectControlStart = value + '-l';
@@ -8141,11 +8159,18 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_5__["registerBlockType"])('hb/
       });
       console.log('both');
     };
+    /**
+     * Test if the start/end selectControls are same.
+     */
+
 
     const testIfSelectControlStartEndSame = () => {
       newSelectControlBoth = selectControlStart.split('-')[0] == selectControlEnd.split('-')[0] ? selectControlStart.split('-')[0] : false;
       console.log('test');
-    }; // Set classes from selectControl values
+    };
+    /**
+     * Set classes from selectControl values.
+     */
 
 
     const setNewClasses = (() => {
@@ -8154,7 +8179,10 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_5__["registerBlockType"])('hb/
         contentDivClasses: newContentDivClasses
       });
       console.log('set ' + newContentDivClasses);
-    })(); // Options for the select controls
+    })();
+    /**
+     * Build options for the select controls.
+     */
 
 
     const options = position => [{
@@ -8176,7 +8204,10 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_5__["registerBlockType"])('hb/
       label: 'Custom',
       value: false,
       disabled: true
-    }]; // Build the bordered divs to highlight grid layout in the editor
+    }];
+    /**
+     * Build the bordered divs to highlight grid layout in the editor.
+     */
 
 
     const BorderDivs = () => {
@@ -8189,12 +8220,11 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_5__["registerBlockType"])('hb/
         key: number.toString()
       }));
       return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["Fragment"], null, divs);
-    }; // Add classname to props
+    };
 
-
-    const blockProps = _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_7__["useBlockProps"].save({
-      className: 'hb__landingSection'
-    }); // Build JSX block for the editor
+    let mess = { ...blockProps
+    };
+    console.log(mess); // Build JSX block for the editor
 
     return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["Fragment"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("section", blockProps, isSelected && Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(BorderDivs, null), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
       className: contentDivClasses
@@ -8231,20 +8261,23 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_5__["registerBlockType"])('hb/
     }, "Help")))));
   },
   // Handle parsing the block into final markup as post content
-  save: attributes => {
+  save: ({
+    attributes
+  }) => {
     // wp attributes === React props
     const {
-      inlineStyle
+      contentDivClasses,
+      selectControlStart,
+      selectControlEnd,
+      selectControlBoth
     } = attributes; // Add classname to props
 
     const blockProps = _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_7__["useBlockProps"].save({
       className: 'hb__landingSection'
-    });
-    console.log(...style); // Build JSX block for front end mark up
+    }); // Build JSX block for front end mark up
 
     return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("section", blockProps, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
-      className: contentDivClasses,
-      style: inlineStyle
+      className: contentDivClasses
     }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_7__["InnerBlocks"], null)), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
       className: "hb__landingSection_backdrop"
     }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_7__["InnerBlocks"], null)));
@@ -8349,6 +8382,17 @@ const IconSettingsCSSGridTrackR = () => Object(_wordpress_element__WEBPACK_IMPOR
 /***/ (function(module, exports) {
 
 (function() { module.exports = window["wp"]["blockEditor"]; }());
+
+/***/ }),
+
+/***/ "@wordpress/block-library":
+/*!**************************************!*\
+  !*** external ["wp","blockLibrary"] ***!
+  \**************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+(function() { module.exports = window["wp"]["blockLibrary"]; }());
 
 /***/ }),
 

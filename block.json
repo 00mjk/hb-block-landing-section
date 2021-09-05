@@ -31,7 +31,7 @@
 		},
 		"selectControlBoth": {
 			"type": "string",
-			"enum": [ "oneone", "threetwo", "sixteennine", "full", "Custom" ],
+			"enum": [ "oneone", "threetwo", "sixteennine", "full", false ],
 			"default": "oneone"
 		}
 	},

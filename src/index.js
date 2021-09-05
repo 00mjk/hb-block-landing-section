@@ -24,6 +24,9 @@ import { registerBlockType } from '@wordpress/blocks';
 import { help } from '@wordpress/icons';
 import { useBlockProps, InnerBlocks, InspectorControls } from '@wordpress/block-editor';
 import { Button, SelectControl, PanelBody, PanelRow } from '@wordpress/components';
+import { useState } from '@wordpress/element';
+import { registerCoreBlocks } from '@wordpress/block-library';
+
 
 /**
  * Register the block "hb/landing-section".
@@ -31,40 +34,40 @@ import { Button, SelectControl, PanelBody, PanelRow } from '@wordpress/component
 registerBlockType( 'hb/landing-section', {
 
 	// Handle the editor block rendering
-	edit: ( { attributes, setAttributes, isSelected } ) => {
+	edit: ( { attributes, setAttributes, isSelected, className } ) => {
+
+		const blockProps = useBlockProps.save( {
+			className: 'hb__landingSection',
+		} );
 
 		const {
-			inlineStyle,
 			contentDivClasses,
 			selectControlStart,
 			selectControlEnd,
 			selectControlBoth
 		} = attributes
 
-		// selectControlValues
 		let newContentDivClasses,
 			newSelectControlBoth,
 			newSelectControlStart,
 			newSelectControlEnd;
 
-		let init
-
-		console.log('init1: ' + init)
-
-		if (typeof init === 'undefined') {
-			init = 'complete';
-		
-			console.log('init2: ' + init)
-		
-			newSelectControlBoth = 
-				selectControlStart.split('-')[0] == 
-				selectControlEnd.split('-')[0] ? 
-				selectControlStart.split('-')[0] : false;
+		/**
+		 * Init the common select control to match the indv start/end controls.
+		 */
+		newSelectControlBoth =
+			selectControlStart.split('-')[0] ==
+			selectControlEnd.split('-')[0] ?
+			selectControlStart.split('-')[0] : false;
+		// only set attr if different
+		if (selectControlBoth !== newSelectControlBoth) {
 			setAttributes( { selectControlBoth: newSelectControlBoth } );
-
-			console.log('init3: ' + init)
+			console.log('selectControlBoth')
 		}
 
+		/**
+		 * Handle grid column start selectControl onChange.
+		 */
 		const onChangeSelectControlStart = (value) => {
 			testIfSelectControlStartEndSame;
 			setAttributes( { 
@@ -72,10 +75,12 @@ registerBlockType( 'hb/landing-section', {
 				selectControlBoth: newSelectControlBoth,
 				contentDivClasses: newContentDivClasses
 			} );
-
 			console.log('start')
 		}
 
+		/**
+		 * Handle grid column end selectControl onChange.
+		 */
 		const onChangeSelectControlEnd = (value) => {
 			testIfSelectControlStartEndSame;
 			setAttributes( { 
@@ -83,10 +88,12 @@ registerBlockType( 'hb/landing-section', {
 				selectControlBoth: newSelectControlBoth,
 				contentDivClasses: newContentDivClasses
 			} );
-
 			console.log('end')
 		}
 
+		/**
+		 * Handle grid column common selectControl onChange.
+		 */
 		const onChangeSelectControlBoth = (value) => {
 			newSelectControlStart = value + '-l';
 			newSelectControlEnd = value + '-r';
@@ -96,20 +103,23 @@ registerBlockType( 'hb/landing-section', {
 				selectControlBoth: value,
 				contentDivClasses: newContentDivClasses
 			} );
-
 			console.log('both')
 		}
 
+		/**
+		 * Test if the start/end selectControls are same.
+		 */
 		const testIfSelectControlStartEndSame = () => {
 			newSelectControlBoth = 
 				selectControlStart.split('-')[0] == 
 				selectControlEnd.split('-')[0] ? 
 				selectControlStart.split('-')[0] : false;
-
 			console.log('test')
 		}
 
-		// Set classes from selectControl values
+		/**
+		 * Set classes from selectControl values.
+		 */
 		const setNewClasses = (() => {
 			newContentDivClasses = 'hb__landingSection_content ' + selectControlStart + ' ' + selectControlEnd;
 			setAttributes( { 
@@ -118,7 +128,9 @@ registerBlockType( 'hb/landing-section', {
 			console.log('set ' + newContentDivClasses)
 		})();
 
-		// Options for the select controls
+		/**
+		 * Build options for the select controls.
+		 */
 		const options = (position) => [
 			{ label: '1:1 Square', value: 'oneone' + position },
 			{ label: '3:2 Wide', value: 'threetwo'+ position },
@@ -132,7 +144,9 @@ registerBlockType( 'hb/landing-section', {
 				{ label: 'Custom', value: false, disabled: true }
 			];
 
-		// Build the bordered divs to highlight grid layout in the editor
+		/**
+		 * Build the bordered divs to highlight grid layout in the editor.
+		 */
 		const BorderDivs = () => {
 			const numbers = [1, 2, 3, 4, 5, 6, 7];
 			const divs = numbers.map((number) =>
@@ -147,10 +161,8 @@ registerBlockType( 'hb/landing-section', {
 			);
 		}
 
-		// Add classname to props
-		const blockProps = useBlockProps.save( {
-			className: 'hb__landingSection',
-		} );
+		let mess = { ...blockProps}
+		console.log(mess);
 
 		// Build JSX block for the editor
 		return (
@@ -229,11 +241,14 @@ registerBlockType( 'hb/landing-section', {
 	},
 
 	// Handle parsing the block into final markup as post content
-	save: ( attributes ) => {
+	save: ( { attributes } ) => {
 
 		// wp attributes === React props
 		const {
-			inlineStyle
+			contentDivClasses,
+			selectControlStart,
+			selectControlEnd,
+			selectControlBoth
 		} = attributes
 
 		// Add classname to props
@@ -241,14 +256,13 @@ registerBlockType( 'hb/landing-section', {
 			className: 'hb__landingSection',
 		} );
 
-		console.log(...style);
 
 		// Build JSX block for front end mark up
 		return (
 
 			<section { ...blockProps }>
 
-				<div className={ contentDivClasses } style={ inlineStyle }>
+				<div className={ contentDivClasses } >
 					<InnerBlocks />
 				</div>
 				<div className="hb__landingSection_backdrop">
