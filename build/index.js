@@ -8056,8 +8056,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_7__);
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_8__);
-/* harmony import */ var _wordpress_block_library__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @wordpress/block-library */ "@wordpress/block-library");
-/* harmony import */ var _wordpress_block_library__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(_wordpress_block_library__WEBPACK_IMPORTED_MODULE_9__);
 
 
 /**
@@ -8079,8 +8077,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
-
 /**
  * Register the block "hb/landing-section".
  */
@@ -8090,98 +8086,150 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_5__["registerBlockType"])('hb/
   edit: ({
     attributes,
     setAttributes,
-    isSelected,
-    className
+    isSelected
   }) => {
     const blockProps = _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_7__["useBlockProps"].save({
       className: 'hb__landingSection'
     });
     const {
       contentDivClasses,
+      selectControlBoth,
       selectControlStart,
-      selectControlEnd,
-      selectControlBoth
+      selectControlEnd
     } = attributes;
+    /**
+     * Vars used as a temp store for new attribute values.
+     *
+     * New attribute values are populated into these vars
+     * before passings to 'setAttributes'. When reading attributes
+     * that were set in the same function, often the values weren't
+     * updated in time for the next line to pull a value from. This
+     * behaviour is expected according to React docs for performance
+     * reasons.
+     *
+     */
+
     let newContentDivClasses, newSelectControlBoth, newSelectControlStart, newSelectControlEnd;
     /**
-     * Init the common select control to match the indv start/end controls.
+     * Test if the start/end selectControls are same.
+     *
+     * If the individual start/end control settings are changed,
+     * the common control which set both at the same time will
+     * reflect an untrue state. Therefore, this function tests
+     * those settings to get a value for the common control:
+     *     - start/end match = return grid position
+     *     - start/end do not match = return false
+     * This value is then used to set the attribute and display
+     * a relevant label in the common selectControl.
+     *
      */
 
-    newSelectControlBoth = selectControlStart.split('-')[0] == selectControlEnd.split('-')[0] ? selectControlStart.split('-')[0] : false; // only set attr if different
-
-    if (selectControlBoth !== newSelectControlBoth) {
-      setAttributes({
-        selectControlBoth: newSelectControlBoth
-      });
-      console.log('selectControlBoth');
-    }
-    /**
-     * Handle grid column start selectControl onChange.
-     */
-
-
-    const onChangeSelectControlStart = value => {
-      testIfSelectControlStartEndSame;
-      setAttributes({
-        selectControlStart: value,
-        selectControlBoth: newSelectControlBoth,
-        contentDivClasses: newContentDivClasses
-      });
-      console.log('start');
+    const getNewSelectControlBoth = function () {
+      newSelectControlBoth = newSelectControlStart.split('-')[0] == newSelectControlEnd.split('-')[0] ? newSelectControlStart.split('-')[0] : false;
+      return newSelectControlBoth;
     };
     /**
-     * Handle grid column end selectControl onChange.
+     * Build new classes string.
+     *
+     * This function is called each time a selectControl setting is
+     * changed. It simply concatenates a string from the given 'new'
+     * variables in a legal CSS class format.
+     *
      */
 
 
-    const onChangeSelectControlEnd = value => {
-      testIfSelectControlStartEndSame;
-      setAttributes({
-        selectControlEnd: value,
-        selectControlBoth: newSelectControlBoth,
-        contentDivClasses: newContentDivClasses
-      });
-      console.log('end');
+    const getNewContentDivClasses = function () {
+      newContentDivClasses = 'hb__landingSection_content ' + newSelectControlStart + ' ' + newSelectControlEnd;
+      return newContentDivClasses;
     };
     /**
-     * Handle grid column common selectControl onChange.
+     * Set all block attributes.
+     *
+     * This function is called by each selectControl function
+     * every time a setting is changed. All attributes are passed
+     * concurrently in a single call to prevent unnecessary
+     * re-renders.
+     *
      */
 
 
-    const onChangeSelectControlBoth = value => {
+    const setAllAttrs = function (start, end, both, classes) {
+      setAttributes({
+        selectControlStart: start,
+        selectControlEnd: end,
+        selectControlBoth: both,
+        contentDivClasses: classes
+      });
+    };
+    /**
+     * Handle 'grid-column-start' selectControl onChange.
+     *
+     * This function is called each time the 'start'
+     * selectControl setting is changed. It retrieves new
+     * values for all variables then passes them to the
+     * setAllAttrs function.
+     *
+     */
+
+
+    const onChangeSelectControlStart = function (value) {
+      newSelectControlStart = value;
+      newSelectControlEnd = selectControlEnd;
+      newSelectControlBoth = getNewSelectControlBoth();
+      newContentDivClasses = getNewContentDivClasses();
+      setAllAttrs(newSelectControlStart, newSelectControlEnd, newSelectControlBoth, newContentDivClasses);
+    };
+    /**
+     * Handle 'grid-column-end' selectControl onChange.
+     *
+     * This function is called each time the 'end'
+     * selectControl setting is changed. It retrieves new
+     * values for all variables then passes them to the
+     * setAllAttrs function.
+     *
+     */
+
+
+    const onChangeSelectControlEnd = function (value) {
+      newSelectControlEnd = value;
+      newSelectControlStart = selectControlStart;
+      newSelectControlBoth = getNewSelectControlBoth();
+      newContentDivClasses = getNewContentDivClasses();
+      setAllAttrs(newSelectControlStart, newSelectControlEnd, newSelectControlBoth, newContentDivClasses);
+    };
+    /**
+     * Handle the 'common' 'grid-column' selectControl onChange.
+     *
+     * This function is called each time the 'start'
+     * selectControl setting is changed. It retrieves new
+     * values for all variables then passes them to the
+     * setAllAttrs function.
+     *
+     */
+
+
+    const onChangeSelectControlBoth = function (value) {
       newSelectControlStart = value + '-l';
       newSelectControlEnd = value + '-r';
-      setAttributes({
-        selectControlStart: newSelectControlStart,
-        selectControlEnd: newSelectControlEnd,
-        selectControlBoth: value,
-        contentDivClasses: newContentDivClasses
-      });
-      console.log('both');
+      newSelectControlBoth = value;
+      newContentDivClasses = getNewContentDivClasses();
+      setAllAttrs(newSelectControlStart, newSelectControlEnd, newSelectControlBoth, newContentDivClasses);
     };
-    /**
-     * Test if the start/end selectControls are same.
-     */
-
-
-    const testIfSelectControlStartEndSame = () => {
-      newSelectControlBoth = selectControlStart.split('-')[0] == selectControlEnd.split('-')[0] ? selectControlStart.split('-')[0] : false;
-      console.log('test');
-    };
-    /**
-     * Set classes from selectControl values.
-     */
-
-
-    const setNewClasses = (() => {
-      newContentDivClasses = 'hb__landingSection_content ' + selectControlStart + ' ' + selectControlEnd;
-      setAttributes({
-        contentDivClasses: newContentDivClasses
-      });
-      console.log('set ' + newContentDivClasses);
-    })();
     /**
      * Build options for the select controls.
+     *
+     * Three variations of the settings are produced:
+     *     - optionsStart = start selectControl.
+     *     - optionsEnd = end selectControl.
+     *     - optionsExtended = common selectControl.
+     * 'Start and 'End add suffixes relevant to the CSS class
+     * names (which also match grid column track names) and the
+     * extended options are for the common control. These
+     * options have no suffix as they are 'start'/'end' agnostic,
+     * and also include an added option of 'Custom' (value='false').
+     * This option is not selectable by the user, but is displayed
+     * when the 'start'/'end' selectControl values do not match,
+     * ergo, a 'Custom' configuration.
      */
 
 
@@ -8206,11 +8254,15 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_5__["registerBlockType"])('hb/
       disabled: true
     }];
     /**
-     * Build the bordered divs to highlight grid layout in the editor.
+     * Build editor block visual aid.
+     *
+     * This array of divs populate the grid to provide a visual
+     * representation of the grid layout. This should only be
+     * displayed when the block is selected.
      */
 
 
-    const BorderDivs = () => {
+    const BorderDivs = function () {
       const numbers = [1, 2, 3, 4, 5, 6, 7];
       const divs = numbers.map(number => Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
         style: {
@@ -8220,17 +8272,23 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_5__["registerBlockType"])('hb/
         key: number.toString()
       }));
       return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["Fragment"], null, divs);
-    };
+    }; // Build JSX block for the editor
 
-    let mess = { ...blockProps
-    };
-    console.log(mess); // Build JSX block for the editor
 
     return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["Fragment"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("section", blockProps, isSelected && Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(BorderDivs, null), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
       className: contentDivClasses
-    }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, "selectControlBoth is ", selectControlBoth, "."), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, "selectControlStart is ", selectControlStart, "."), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, "selectControlEnd is ", selectControlEnd, "."), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_7__["InnerBlocks"], null)), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
+    }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, "This is the hb__landingSection block."), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_7__["InnerBlocks"], null)), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
       className: "hb__landingSection_backdrop"
-    }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_7__["InnerBlocks"], null))), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_7__["InspectorControls"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_8__["PanelBody"], {
+    }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_7__["InnerBlocks"], {
+      allowedBlocks: 'core/image'
+    }))), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_7__["BlockControls"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_8__["SelectControl"], {
+      label: "gridColumn",
+      labelPosition: "Left",
+      title: "gridColumn",
+      value: selectControlBoth,
+      options: optionsExtended,
+      onChange: value => onChangeSelectControlBoth(value)
+    })), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_7__["InspectorControls"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_8__["PanelBody"], {
       title: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__["__"])('Width and Position'),
       initialOpen: true
     }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_8__["PanelRow"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_svg_icons_js__WEBPACK_IMPORTED_MODULE_3__["IconSettingsCSSGridTracksLR"], null)), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_8__["PanelRow"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_8__["SelectControl"], {
@@ -8260,6 +8318,17 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_5__["registerBlockType"])('hb/
       className: "hb__inspectorHelpButton"
     }, "Help")))));
   },
+  //edit
+  example: ({
+    attributes
+  }) => {
+    Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("section", blockProps, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
+      className: 'hb__landingSection_content oneone-l oneone-r'
+    }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, "This is a paragraph demonstrated in the content box. You can add any content blocks here and it will be displayed in front of the background box.")), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
+      className: "hb__landingSection_backdrop"
+    }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, "I am a paragraph in the background box. You can add any content blocks here and they will be displayed behind the content box.")));
+  },
+  //example
   // Handle parsing the block into final markup as post content
   save: ({
     attributes
@@ -8278,10 +8347,11 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_5__["registerBlockType"])('hb/
 
     return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("section", blockProps, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
       className: contentDivClasses
-    }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, "selectControlBoth is ", selectControlBoth, "."), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, "selectControlStart is ", selectControlStart, "."), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, "selectControlEnd is ", selectControlEnd, "."), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_7__["InnerBlocks"], null)), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
+    }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, "selectControlBoth is ", selectControlBoth, "."), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, "selectControlStart is ", selectControlStart, "."), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, "selectControlEnd is ", selectControlEnd, "."), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_7__["InnerBlocks"].Content, null)), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
       className: "hb__landingSection_backdrop"
-    }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_7__["InnerBlocks"], null)));
-  }
+    }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_7__["InnerBlocks"].Content, null)));
+  } //save
+
 });
 
 /***/ }),
@@ -8382,17 +8452,6 @@ const IconSettingsCSSGridTrackR = () => Object(_wordpress_element__WEBPACK_IMPOR
 /***/ (function(module, exports) {
 
 (function() { module.exports = window["wp"]["blockEditor"]; }());
-
-/***/ }),
-
-/***/ "@wordpress/block-library":
-/*!**************************************!*\
-  !*** external ["wp","blockLibrary"] ***!
-  \**************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-(function() { module.exports = window["wp"]["blockLibrary"]; }());
 
 /***/ }),
 

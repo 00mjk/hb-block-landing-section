@@ -71,7 +71,7 @@
 .hb__landingSection_content {
     position: relative;
     grid-row: 1 / -1;
-    z-index: 0;
+    z-index: 2;
 }
 .oneone-l { grid-column-start: oneone-l; }
 .oneone-r { grid-column-end: oneone-r; }
@@ -86,9 +86,8 @@
     position: absolute;
     grid-column: 1 / -1; /*Backdrop spans entire section (page-width)*/
     grid-row: 1 / -1;
-    z-index: -1;
+    z-index: 0;
     width: 100%;
     height: 100%;
     overflow: hidden;
-    background-color: #9995;
 }
