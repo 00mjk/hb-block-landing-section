@@ -263,6 +263,9 @@ registerBlockType( 'hb/landing-section', {
 			<section { ...blockProps }>
 
 				<div className={ contentDivClasses } >
+						<p>selectControlBoth is { selectControlBoth }.</p>
+						<p>selectControlStart is { selectControlStart }.</p>
+						<p>selectControlEnd is { selectControlEnd }.</p>
 					<InnerBlocks />
 				</div>
 				<div className="hb__landingSection_backdrop">
