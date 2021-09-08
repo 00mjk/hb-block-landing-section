@@ -1,22 +1,4 @@
 /**
- * Import local Styles.
- */
-import './style.scss';
-import './editor.scss';
-
-/**
- * Import local Icons.
- */
-import {
-	IconSettingsCSSGridTracksLR,
-	IconSettingsAspectRatioSquare,
-	IconSettingsAspectRatioWide,
-	IconSettingsAspectRatioUltrawide,
-	IconSettingsCSSGridTrackL,
-	IconSettingsCSSGridTrackR,
-} from '../svg/icons.js';
-
-/**
  * Import WordPress Dependencies.
  */
 import { __ } from '@wordpress/i18n';
@@ -35,6 +17,25 @@ import {
 	PanelBody,
 	PanelRow,
 } from '@wordpress/components';
+
+/**
+ * Import local Styles.
+ */
+ import './style.scss';
+ import './editor.scss';
+ 
+ /**
+  * Import local Icons.
+  */
+ import {
+	 IconSettingsCSSGridTracksLR,
+	 IconSettingsAspectRatioSquare,
+	 IconSettingsAspectRatioWide,
+	 IconSettingsAspectRatioUltrawide,
+	 IconSettingsCSSGridTrackL,
+	 IconSettingsCSSGridTrackR,
+ } from '../svg/icons.js';
+
 
 
 /**
@@ -330,6 +331,7 @@ registerBlockType( 'hb/landing-section', {
 		);
 	},//edit
 
+
 	example: ( { attributes } ) => {
 
 		<section { ...blockProps }>
@@ -339,6 +341,7 @@ registerBlockType( 'hb/landing-section', {
 					add any content blocks here and it will be displayed in
 					front of the background box.
 				</p>
+				<InnerBlocks.Content />
 			</div>
 			<div className="hb__landingSection_backdrop">
 				<p>
@@ -346,10 +349,12 @@ registerBlockType( 'hb/landing-section', {
 					content blocks here and they will be displayed behind the
 					content box.
 				</p>
+				<InnerBlocks.Content />
 			</div>
 		</section>;
 
 	},//example
+
 
 	// Handle parsing the block into final markup as post content
 	save: ( { attributes } ) => {
@@ -381,4 +386,5 @@ registerBlockType( 'hb/landing-section', {
 			</section>
 		);
 	},//save
-} );
+
+});
