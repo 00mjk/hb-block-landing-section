@@ -7,9 +7,10 @@ import { help } from '@wordpress/icons';
 import {
 	BlockControls,
 	useBlockProps,
+	RichText,
+    AlignmentToolbar,
 	InnerBlocks,
 	InspectorControls,
-	useSetting
 } from '@wordpress/block-editor';
 import {
 	Button,
@@ -17,6 +18,11 @@ import {
 	PanelBody,
 	PanelRow,
 } from '@wordpress/components';
+import { 
+	useEffect, 
+	useRef, 
+	useState 
+} from '@wordpress/element';
 
 /**
  * Import local Styles.
@@ -36,25 +42,23 @@ import {
 	 IconSettingsCSSGridTrackR,
  } from '../svg/icons.js';
 
-
-
 /**
  * Register the block "hb/landing-section".
  */
 registerBlockType( 'hb/landing-section', {
 
 	// Handle the editor block rendering
-	edit: ( { attributes, setAttributes, isSelected } ) => {
+	edit: ( { attributes, setAttributes, clientId, isSelected } ) => {
 
 		const blockProps = useBlockProps.save( {
 			className: 'hb__landingSection',
 		} );
 
 		const {
-			contentDivClasses,
-			selectControlBoth,
-			selectControlStart,
-			selectControlEnd,
+			gridColBoth,
+			gridColStart,
+			gridColEnd,
+			alignment,
 		} = attributes;
 
 		/**
@@ -68,10 +72,9 @@ registerBlockType( 'hb/landing-section', {
 		 * reasons.
 		 *
 		 */
-		let newContentDivClasses,
-			newSelectControlBoth,
-			newSelectControlStart,
-			newSelectControlEnd;
+		let newGridColBoth,
+			newGridColStart,
+			newGridColEnd;
 
 		/**
 		 * Test if the start/end selectControls are same.
@@ -86,34 +89,17 @@ registerBlockType( 'hb/landing-section', {
 		 * a relevant label in the common selectControl.
 		 *
 		 */
-		const getNewSelectControlBoth = function () {
-			newSelectControlBoth =
-				newSelectControlStart.split( '-' )[ 0 ] ==
-				newSelectControlEnd.split( '-' )[ 0 ]
-					? newSelectControlStart.split( '-' )[ 0 ]
+		const getNewGridColBoth = () => {
+			newGridColBoth =
+				newGridColStart.split( '-' )[ 0 ] ==
+				newGridColEnd.split( '-' )[ 0 ]
+					? newGridColStart.split( '-' )[ 0 ]
 					: false;
-			return newSelectControlBoth;
+			return newGridColBoth;
 		};
 
 		/**
-		 * Build new classes string.
-		 *
-		 * This function is called each time a selectControl setting is
-		 * changed. It simply concatenates a string from the given 'new'
-		 * variables in a legal CSS class format.
-		 *
-		 */
-		const getNewContentDivClasses = function () {
-			newContentDivClasses =
-				'hb__landingSection_content ' +
-				newSelectControlStart +
-				' ' +
-				newSelectControlEnd;
-			return newContentDivClasses;
-		};
-
-		/**
-		 * Set all block attributes.
+		 * Set all grid-column block attributes.
 		 *
 		 * This function is called by each selectControl function
 		 * every time a setting is changed. All attributes are passed
@@ -121,12 +107,11 @@ registerBlockType( 'hb/landing-section', {
 		 * re-renders.
 		 *
 		 */
-		const setAllAttrs = function ( start, end, both, classes ) {
+		const setGridAttrs = ( start, end, both ) => {
 			setAttributes( {
-				selectControlStart: start,
-				selectControlEnd: end,
-				selectControlBoth: both,
-				contentDivClasses: classes,
+				gridColStart: start,
+				gridColEnd: end,
+				gridColBoth: both
 			} );
 		};
 
@@ -136,19 +121,17 @@ registerBlockType( 'hb/landing-section', {
 		 * This function is called each time the 'start'
 		 * selectControl setting is changed. It retrieves new
 		 * values for all variables then passes them to the
-		 * setAllAttrs function.
+		 * setGridAttrs function.
 		 *
 		 */
-		const onChangeSelectControlStart = function ( value ) {
-			newSelectControlStart = value;
-			newSelectControlEnd = selectControlEnd;
-			newSelectControlBoth = getNewSelectControlBoth();
-			newContentDivClasses = getNewContentDivClasses();
-			setAllAttrs(
-				newSelectControlStart,
-				newSelectControlEnd,
-				newSelectControlBoth,
-				newContentDivClasses
+		const onChangeGridColStart = ( value ) => {
+			newGridColStart = value;
+			newGridColEnd = gridColEnd;
+			newGridColBoth = getNewGridColBoth();
+			setGridAttrs(
+				newGridColStart,
+				newGridColEnd,
+				newGridColBoth
 			);
 		};
 
@@ -158,19 +141,17 @@ registerBlockType( 'hb/landing-section', {
 		 * This function is called each time the 'end'
 		 * selectControl setting is changed. It retrieves new
 		 * values for all variables then passes them to the
-		 * setAllAttrs function.
+		 * setGridAttrs function.
 		 *
 		 */
-		const onChangeSelectControlEnd = function ( value ) {
-			newSelectControlEnd = value;
-			newSelectControlStart = selectControlStart;
-			newSelectControlBoth = getNewSelectControlBoth();
-			newContentDivClasses = getNewContentDivClasses();
-			setAllAttrs(
-				newSelectControlStart,
-				newSelectControlEnd,
-				newSelectControlBoth,
-				newContentDivClasses
+		const onChangeGridColEnd = ( value ) => {
+			newGridColEnd = value;
+			newGridColStart = gridColStart;
+			newGridColBoth = getNewGridColBoth();
+			setGridAttrs(
+				newGridColStart,
+				newGridColEnd,
+				newGridColBoth,
 			);
 		};
 
@@ -180,21 +161,33 @@ registerBlockType( 'hb/landing-section', {
 		 * This function is called each time the 'start'
 		 * selectControl setting is changed. It retrieves new
 		 * values for all variables then passes them to the
-		 * setAllAttrs function.
+		 * setGridAttrs function.
 		 *
 		 */
-		const onChangeSelectControlBoth = function ( value ) {
-			newSelectControlStart = value + '-l';
-			newSelectControlEnd = value + '-r';
-			newSelectControlBoth = value;
-			newContentDivClasses = getNewContentDivClasses();
-			setAllAttrs(
-				newSelectControlStart,
-				newSelectControlEnd,
-				newSelectControlBoth,
-				newContentDivClasses
+		const onChangeGridColBoth = ( value ) => {
+			newGridColStart = value + '-l';
+			newGridColEnd = value + '-r';
+			newGridColBoth = value;
+			setGridAttrs(
+				newGridColStart,
+				newGridColEnd,
+				newGridColBoth,
 			);
 		};
+
+		/**
+		 * Handle the alignment onChange.
+		 *
+		 * This function is called each time the 'alignment'
+		 * toolbar setting is changed. It updates the value of
+		 * attribute.alignment.
+		 *
+		 */
+        const onChangeAlignment = ( newAlignment ) => {
+            setAttributes( {
+                alignment: newAlignment === undefined ? 'none' : newAlignment,
+            } );
+        };
 
 		/**
 		 * Build options for the select controls.
@@ -217,10 +210,10 @@ registerBlockType( 'hb/landing-section', {
 				{ label: '3:2 Wide', value: 'threetwo' + position },
 				{ label: '16:9 Cinema', value: 'sixteennine' + position },
 				{ label: 'Full Width', value: 'full' + position },
-			],
-			optionsStart = options( '-l' ),
-			optionsEnd = options( '-r' ),
-			optionsExtended = [
+			]
+		const optionsStart = options( '-l' )
+		const optionsEnd = options( '-r' )
+		const optionsExtended = [
 				...options( '' ),
 				{ label: 'Custom', value: false, disabled: true },
 			];
@@ -232,7 +225,7 @@ registerBlockType( 'hb/landing-section', {
 		 * representation of the grid layout. This should only be
 		 * displayed when the block is selected.
 		 */
-		const BorderDivs = function () {
+		const BorderDivs = () => {
 			const numbers = [ 1, 2, 3, 4, 5, 6, 7 ];
 			const divs = numbers.map( ( number ) => (
 				<div
@@ -247,30 +240,49 @@ registerBlockType( 'hb/landing-section', {
 		// Build JSX block for the editor
 		return (
 			<>
+
+				{isSelected && (
+					<BlockControls key="controls">
+                        <AlignmentToolbar
+                            value={ attributes.alignment }
+                            onChange={ onChangeAlignment }
+                        />
+					</BlockControls>
+				)}
+
 				<section { ...blockProps }>
 					{ isSelected && <BorderDivs /> }
 
-					<div className={ contentDivClasses }>
-						<p>This is the hb__landingSection block.</p>
-						<InnerBlocks />
-					</div>
+					{isSelected && (
+						<div
+							className="hb__landingSection_content hb__editorBorder"
+							style={{
+
+								gridColumnStart: gridColStart,
+								gridColumnEnd: gridColEnd,
+							}}>
+							<p>This is the hb__landingSection block.</p>
+							<p>isSelected: { isSelected }</p>
+							<InnerBlocks />
+						</div>
+					)}
+
+					{!isSelected && (
+						<div
+							className="hb__landingSection_content"
+							style={{
+								gridColumnStart: gridColStart,
+								gridColumnEnd: gridColEnd,
+							}}>
+							<p>This is the hb__landingSection block.</p>
+							<InnerBlocks />
+						</div>
+					)}
+
 					<div className="hb__landingSection_backdrop">
 						<InnerBlocks allowedBlocks={ 'core/image' } />
 					</div>
 				</section>
-
-				<BlockControls>
-					<SelectControl
-							label="gridColumn"
-							labelPosition="Left"
-							title="gridColumn"
-							value={ selectControlBoth }
-							options={ optionsExtended }
-							onChange={ ( value ) =>
-								onChangeSelectControlBoth( value )
-							}
-					/>
-				</BlockControls>
 
 				<InspectorControls>
 					<PanelBody
@@ -285,10 +297,10 @@ registerBlockType( 'hb/landing-section', {
 								label="gridColumn"
 								labelPosition="Left"
 								title="gridColumn"
-								value={ selectControlBoth }
+								value={ gridColBoth }
 								options={ optionsExtended }
 								onChange={ ( value ) =>
-									onChangeSelectControlBoth( value )
+									onChangeGridColBoth( value )
 								}
 							/>
 						</PanelRow>
@@ -297,10 +309,10 @@ registerBlockType( 'hb/landing-section', {
 								label="gridColumnStart"
 								labelPosition="left"
 								title="gridColumnStart"
-								value={ selectControlStart }
+								value={ gridColStart }
 								options={ optionsStart }
 								onChange={ ( value ) =>
-									onChangeSelectControlStart( value )
+									onChangeGridColStart( value )
 								}
 							/>
 						</PanelRow>
@@ -309,10 +321,10 @@ registerBlockType( 'hb/landing-section', {
 								label="gridColumnEnd"
 								labelPosition="left"
 								title="gridColumnEnd"
-								value={ selectControlEnd }
+								value={ gridColEnd }
 								options={ optionsEnd }
 								onChange={ ( value ) =>
-									onChangeSelectControlEnd( value )
+									onChangeGridColEnd( value )
 								}
 							/>
 						</PanelRow>
@@ -335,7 +347,13 @@ registerBlockType( 'hb/landing-section', {
 	example: ( { attributes } ) => {
 
 		<section { ...blockProps }>
-			<div className={ 'hb__landingSection_content oneone-l oneone-r' }>
+			<div 
+				className="hb__landingSection_content"
+				style={{
+					gridColumnStart: "oneone-l",
+					gridColumnEnd: "oneone-r",
+				}}
+			>
 				<p>
 					This is a paragraph demonstrated in the content box. You can
 					add any content blocks here and it will be displayed in
@@ -360,10 +378,9 @@ registerBlockType( 'hb/landing-section', {
 	save: ( { attributes } ) => {
 		// wp attributes === React props
 		const {
-			contentDivClasses,
-			selectControlStart,
-			selectControlEnd,
-			selectControlBoth,
+			gridColStart,
+			gridColEnd,
+			gridColBoth,
 		} = attributes;
 
 		// Add classname to props
@@ -374,10 +391,16 @@ registerBlockType( 'hb/landing-section', {
 		// Build JSX block for front end mark up
 		return (
 			<section { ...blockProps }>
-				<div className={ contentDivClasses }>
-					<p>selectControlBoth is { selectControlBoth }.</p>
-					<p>selectControlStart is { selectControlStart }.</p>
-					<p>selectControlEnd is { selectControlEnd }.</p>
+				<div
+					className="hb__landingSection_content"
+					style={{
+						gridColumnStart: gridColStart,
+						gridColumnEnd: gridColEnd,
+					}}
+				>
+					<p>gridColBoth is { gridColBoth }.</p>
+					<p>gridColStart is { gridColStart }.</p>
+					<p>gridColEnd is { gridColEnd }.</p>
 					<InnerBlocks.Content />
 				</div>
 				<div className="hb__landingSection_backdrop">

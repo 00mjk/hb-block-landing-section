@@ -6,7 +6,7 @@
     --hb__editorGuideColour: #5554;
     --hb__editorContentColour: #0008;
     --hb__editorGuideBorder: dotted 1px var(--hb__editorGuideColour);
-    --hb__editorContentBorder: solid 1px var(--hb__editorContentColour);
+    --hb__editorContentBorder: solid 2px var(--hb__editorContentColour);
 }
 
 .hb__inspectorHelpButton {
@@ -14,7 +14,6 @@
 }
 
 .hb__landingSection_content {
-    border: var(---hb__editorContentBorder);
     min-height: 60px;
 }
 
@@ -26,8 +25,12 @@
     height: 100%;
     overflow: hidden;
     content: "Full Width";
-    z-index: 1;
-    pointer-events: none;
+    z-index: 0;
+    /* pointer-events: none; */
+}
+
+.hb__editorBorder {
+    border: var(--hb__editorContentBorder);
 }
 
 .hb__outline:nth-child(n+2) {

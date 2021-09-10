@@ -12,27 +12,23 @@
 	"editorStyle": "file:./build/index.css",
 	"style": "file:./build/style-index.css",
 	"attributes": {
-		"contentDivClasses": {
-			"type": "string",
-			"source": "attribute",
-			"selector": ".hb__landingSection_content",
-			"attribute": "class",
-			"default": "hb__landingSection_content oneone-l oneone-r"
-		},
-		"selectControlStart": {
+		"gridColStart": {
 			"type": "string",
 			"enum": [ "oneone-l", "threetwo-l", "sixteennine-l", "full-l" ],
 			"default": "oneone-l"
 		},
-		"selectControlEnd": {
+		"gridColEnd": {
 			"type": "string",
 			"enum": [ "oneone-r", "threetwo-r", "sixteennine-r", "full-r"  ],
 			"default": "oneone-r"
 		},
-		"selectControlBoth": {
+		"gridColBoth": {
 			"type": "string",
 			"enum": [ "oneone", "threetwo", "sixteennine", "full", false ],
 			"default": "oneone"
+		},
+		"alignment": {
+			"type": "string"
 		}
 	},
 	"supports": {
