@@ -184,8 +184,9 @@ registerBlockType( 'hb/landing-section', {
 		 *
 		 */
         const onChangeAlignment = ( newAlignment ) => {
+			value = ( newAlignment === undefined ) ? 'none' : newAlignment;
             setAttributes( {
-                alignment: newAlignment === undefined ? 'none' : newAlignment,
+                alignment: value,
             } );
         };
 
@@ -261,8 +262,6 @@ registerBlockType( 'hb/landing-section', {
 								gridColumnStart: gridColStart,
 								gridColumnEnd: gridColEnd,
 							}}>
-							<p>This is the hb__landingSection block.</p>
-							<p>isSelected: { isSelected }</p>
 							<InnerBlocks />
 						</div>
 					)}
@@ -274,7 +273,6 @@ registerBlockType( 'hb/landing-section', {
 								gridColumnStart: gridColStart,
 								gridColumnEnd: gridColEnd,
 							}}>
-							<p>This is the hb__landingSection block.</p>
 							<InnerBlocks />
 						</div>
 					)}
