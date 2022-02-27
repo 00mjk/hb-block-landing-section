@@ -2,6 +2,53 @@
  * Styles applied in the editor only.
  */
 
-.wp-block-hb-block-landing-section {
-	border: 1px dotted #f00;
+:root {
+    --hb__editorGuideColour: #5554;
+    --hb__editorContentColour: #0008;
+    --hb__editorGuideBorder: dotted 1px var(--hb__editorGuideColour);
+    --hb__editorContentBorder: solid 2px var(--hb__editorContentColour);
+}
+
+.hb__inspectorHelpButton {
+    margin: 0 auto;
+}
+
+.hb__landingSection_content {
+    min-height: 60px;
+}
+
+.hb__outline {
+    border: var(--hb__editorGuideBorder);
+    color: var(--hb__editorGuideColour);
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    content: "Full Width";
+    z-index: 0;
+    /* pointer-events: none; */
+}
+
+.hb__editorBorder {
+    border: var(--hb__editorContentBorder);
+}
+
+.hb__outline:nth-child(n+2) {
+    border-left: none;
+}
+
+.hb__outline:before {
+    content: "Full Width";
+}
+
+.hb__outline:nth-child(n+2):nth-child(-n+6):before {
+    content: "16:9";
+}
+
+.hb__outline:nth-child(n+3):nth-child(-n+5):before {
+    content: "3:2";
+}
+
+.hb__outline:nth-child(4):nth-child(4):before {
+    content: "1:1";
 }

@@ -1,10 +1,132 @@
 /**
  * Styles applied to both the front and back end.
+ *
+ * SECTION GRID COLUMNS
+ *
+ * Horrible to explain but actually quite simple...
+ * 
+ * The centre column aims to have a width matching vh for a 1:1 box.
+ * The secondary columns stretch to a 3:2 box.
+ * The tertiary columns stretch to a 16:9 box.
+ * 
+ * All column mins are based on the ultrawide aspect ratio being the most
+ * extreme aspect ratio in common use. Any aspect ratio wider than this will be
+ * created through browser resizing or specialist monitor configs and the user
+ * will likely be expecting to scroll the content.
+ * 
+ * 3440/1440 = 2.39 (ultrawide aspect ratio)
+ * 100/2.39 = 41.86 (height as a percentage of the width = ultrawide aspect ratio)
+ * 
+ * 41.86vw will be the smallest viewport height with a fullscreen browser (ex UI)
+ * on an ultrawide monitor. The centre column should be no narrower than this.
+ * 
+ * Min column widths when they are in full view - aka the viewport has an aspect
+ * ratio larger than that of the columns aspect ratio:
+ * 
+ * 41.86vw = main 1:1 column
+ * 10.47vw = 3:2 columns
+ * 5.81vw   = 16:9 columns
+ * 
+ * When the column outer edges meet the viewport edge, the column reponds by only
+ * being as wide as the space available to prevent overflow.
  */
-.wp-block-hb-block-landing-section {
-  background-color: #21759b;
-  color: #fff;
-  padding: 2px;
+.hb__landingSection {
+  margin: 0;
+}
+
+.hb__landingSection {
+  gap: 0;
+  --oneone: clamp(41.86vmax, 100vmin, 100vmin);
+  /* Creates a square centre section */
+  --threetwo: clamp(clamp(0px, calc(50vw - 50vh), 10.47vmax), calc(50vw - 50vh), 25vmin);
+  /* These columns create a 3:2 view */
+  --sixteennine: clamp(clamp(0px, calc(50vw - 75vh), 5.81vmax), calc(50vw - 75vh), 13.89vmin);
+  /* These columns create a 16:9 view */
+  display: -ms-grid;
+  display: grid;
+  position: relative;
+  grid-column: 1/-1;
+  -ms-grid-columns: [full-l] 1fr [sixteennine-l threetwo-l oneone-l] calc(100% - 2 * var(--hb_gutters)) [oneone-r threetwo-r sixteennine-r] 1fr [full-r];
+  grid-template-columns: [full-l] 1fr [sixteennine-l threetwo-l oneone-l] calc(100% - 2 * var(--hb_gutters)) [oneone-r threetwo-r sixteennine-r] 1fr [full-r];
+  justify-content: center;
+  width: 100%;
+  max-width: 100vw;
+  text-align: center;
+}
+
+@media (min-width: 100vh) {
+  .hb__landingSection {
+    -ms-grid-columns: [full-l] 1fr [sixteennine-l threetwo-l] var(--threetwo) [oneone-l] var(--oneone) [oneone-r] var(--threetwo) [threetwo-r sixteennine-r] 1fr [full-r];
+    grid-template-columns: [full-l] 1fr [sixteennine-l threetwo-l] var(--threetwo) [oneone-l] var(--oneone) [oneone-r] var(--threetwo) [threetwo-r sixteennine-r] 1fr [full-r];
+  }
+}
+@media (min-width: 150vh) {
+  .hb__landingSection {
+    -ms-grid-columns: [full-l] 1fr [sixteennine-l] var(--sixteennine) [threetwo-l] var(--threetwo) [oneone-l] var(--oneone) [oneone-r] var(--threetwo) [threetwo-r] var(--sixteennine) [sixteennine-r] 1fr [full-r];
+    grid-template-columns: [full-l] 1fr [sixteennine-l] var(--sixteennine) [threetwo-l] var(--threetwo) [oneone-l] var(--oneone) [oneone-r] var(--threetwo) [threetwo-r] var(--sixteennine) [sixteennine-r] 1fr [full-r];
+  }
+}
+@media (orientation: portrait) {
+  .hb__landingSection {
+    -ms-grid-columns: [full-l] 1fr [sixteennine-l threetwo-l oneone-l] calc(100% - 2 * var(--hb_gutters)) [oneone-r threetwo-r sixteennine-r] 1fr [full-r];
+    grid-template-columns: [full-l] 1fr [sixteennine-l threetwo-l oneone-l] calc(100% - 2 * var(--hb_gutters)) [oneone-r threetwo-r sixteennine-r] 1fr [full-r];
+  }
+}
+.hb__landingSection_content {
+  position: relative;
+  grid-row: 1/-1;
+  z-index: 2;
+}
+
+.oneone-l {
+  -ms-grid-column: oneone-l;
+      grid-column-start: oneone-l;
+}
+
+.oneone-r {
+  -ms-grid-column-span: oneone-r;
+  grid-column-end: oneone-r;
+}
+
+.threetwo-l {
+  -ms-grid-column: threetwo-l;
+      grid-column-start: threetwo-l;
+}
+
+.threetwo-r {
+  -ms-grid-column-span: threetwo-r;
+  grid-column-end: threetwo-r;
+}
+
+.sixteennine-l {
+  -ms-grid-column: sixteennine-l;
+      grid-column-start: sixteennine-l;
+}
+
+.sixteennine-r {
+  -ms-grid-column-span: sixteennine-r;
+  grid-column-end: sixteennine-r;
+}
+
+.full-l {
+  -ms-grid-column: full-l;
+      grid-column-start: full-l;
+}
+
+.full-r {
+  -ms-grid-column-span: full-r;
+  grid-column-end: full-r;
+}
+
+.hb__landingSection_backdrop {
+  position: absolute;
+  grid-column: 1/-1;
+  /*Backdrop spans entire section (page-width)*/
+  grid-row: 1/-1;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
 }
 
 /*# sourceMappingURL=style-index.css.map*/
