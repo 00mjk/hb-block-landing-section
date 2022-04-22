@@ -7,7 +7,6 @@ import { help } from '@wordpress/icons';
 import {
 	BlockControls,
 	useBlockProps,
-	RichText,
     AlignmentToolbar,
 	InnerBlocks,
 	InspectorControls,
@@ -18,11 +17,6 @@ import {
 	PanelBody,
 	PanelRow,
 } from '@wordpress/components';
-import { 
-	useEffect, 
-	useRef, 
-	useState 
-} from '@wordpress/element';
 
 /**
  * Import local Styles.
@@ -48,13 +42,13 @@ import {
 registerBlockType( 'hb/landing-section', {
 
 	// Handle the editor block rendering
-	edit: ( { attributes, setAttributes, clientId, isSelected } ) => {
+	edit: ( { attributes, setAttributes, isSelected } ) => {
 
 		const blockProps = useBlockProps.save( {
 			className: 'hb__landingSection',
 		} );
 
-		const {
+		let {
 			gridColBoth,
 			gridColStart,
 			gridColEnd,
